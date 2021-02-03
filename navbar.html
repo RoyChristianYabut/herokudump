@@ -1,0 +1,385 @@
+{% load cart_template_tags %}
+{% load notifications_tags %}
+{% load static %}
+
+<!-- {% register_notify_callbacks menu_class='live_notify_list' callbacks='fill_notification_list,fill_notification_badge' %} -->
+
+
+<!-- <select class="form-control" name="category" id="id_category" placeholder="Category">
+          <option value="" selected>Category</option>
+          {% for item in page_obj.0.CATEGORY_CHOICES %}
+          <option value="{{ item.0 }}">{{ item.1 }}</option>
+          {% endfor %}
+        </select> -->
+<style>
+  .dropdown-toggle::after {
+    content: none;
+  }
+
+  .navbar-collapse.collapse {
+    display: block !important;
+  }
+
+  .navbar-nav>li,
+  .navbar-nav {
+    float: left !important;
+  }
+
+  .navbar-nav.navbar-right:last-child {
+    margin-right: -15px !important;
+  }
+
+  .navbar-right {
+    float: right !important;
+  }
+</style>
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-light scrolling-navbar" style="background-color: #FFD215;">
+
+  <div class="container" style="max-width: 100% !important; margin:none;">
+
+
+    {% if current_url is None %}
+
+    {% else %}
+    <div class="d-none  d-sm-block d-md-block">
+      <button disabled type="button" id="sidebarCollapse" class="ml-3" style="border: none; background-color:
+      #FFD215; padding-right: none; margin-right: none;">
+        <img src="{% static 'img/nav_button_for_mobile.png' %}">
+      </button>
+    </div>
+
+    {% endif %}
+    
+    <!-- Brand -->
+    {% if current_url is None %}
+    <div class="d-none  d-sm-block d-md-block mr-auto">
+      <a href="/">
+        <img src="{% static 'img/roy_plaza_store_online_logo.png' %}">
+      </a>
+    </div>
+    {% else %}
+    <div class="d-none  d-sm-block d-md-block mr-auto">
+      <a href="/" class="ml-5 mr-2">
+        <img src="{% static 'img/roy_plaza_store_online_logo.png' %}">
+      </a>
+    </div>
+    {% endif %}
+    <!-- Icons small -->
+
+
+
+
+    {% if current_url is None %}
+
+    {% else %}
+    <ul class="navbar-nav nav-flex-icons d-block d-sm-none">
+      <li class="nav-item nav-link waves-effect">
+        <button type="button" id="sidebarCollapse1" style="border: none; background-color:
+        #FFD215; ">
+          <img src="{% static 'img/nav_button_for_mobile.png' %}">
+        </button>
+      </li>
+    </ul>
+    {% endif %}
+
+
+    <!--  -->
+    {% if current_url is None %}
+    <ul class="navbar-nav nav-flex-icons d-block d-sm-none mr-auto">
+      <li class="nav-item ">
+        <a href="/">
+          <img src="{% static 'img/ROY-Plaza-Store-Logo-1.png' %}" height="46">
+        </a>
+      </li>
+    </ul>
+    {% else %}
+    <ul class="navbar-nav nav-flex-icons d-block d-sm-none mr-auto">
+      <li class="nav-item ">
+        <a href="/">
+          <img src="{% static 'img/ROY-Plaza-Store-Logo-1.png' %}" height="46">
+        </a>
+      </li>
+    </ul>
+    {% endif %}
+    <!--  -->
+
+    {% if request.user.is_authenticated %}
+    <ul class="navbar-nav nav-flex-icons d-block d-sm-block d-md-block d-lg-none ml-auto">
+      <li class="nav-item" id="cart_no">
+        <div>
+          <a href="{% url 'core:order-summary' %}" class="nav-link waves-effect">
+            <div class="view overlay" style="width:28px;height:25px;position:absolute;right:0;top:0;z-index:100;">
+              <span class="badge badge-pill red z-depth-1 mr-1 " style="position:absolute;z-index:101;">
+                {{ request.user|cart_item_count }} </span>
+            </div>
+            <img src="{% static 'img/shopping_cart_icon.png' %}">
+
+            <!-- <i class="fas fa-shopping-cart"></i>
+      <span class="clearfix d-none d-sm-inline-block"> Cart </span> -->
+          </a>
+        </div>
+      </li>
+      {% notifications_unread as unread_count %}
+      <li class="nav-item">
+        <div class="dropdown">
+          <a href="#" class="nav-link waves-effect" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <div class="view overlay" style="width:25px;height:25px;position:absolute;right:0;top:0;z-index:100;">
+              <span class="badge badge-pill red z-depth-1 mr-1"> {{ unread_count }} </span>
+            </div>
+            <img src="{% static 'img/bell_icon_icon.png' %}">
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton"
+              style="overflow-y: auto; max-height: 200px; padding-top: 0px;">
+              {% for q in queryset %}
+              <a style="font-size: 0.6rem;" class="dropdown-item" href="{% url 'core:mark-read' q.pk %}"> {{ q.verb }}
+                ({{ q.timestamp|timesince }}
+                ago)</a>
+              {% endfor %}
+            </div>
+
+            <!-- <i class="fas fa-shopping-cart"></i>
+      <span class="clearfix d-none d-sm-inline-block"> Cart </span> -->
+          </a>
+        </div>
+      </li>
+
+      <!--was here-->
+      <li class="nav-item">
+        <div class="dropdown">
+          <a class=" nav-link waves-effect dropdown-toggle" href="/user-profile" id="dropdownMenuLink1"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% if user.userprofile.image == "default.jpg"  %}
+            <img src="{% static 'img/user_profile.png' %}">
+            {% else %}
+            <img src="{{ user.userprofile.image.url }}"
+              style="border:1px solid; border-color: #0000AD; border-radius: 50%;height:40px; width:40px; object-fit: cover; ">
+            {% endif %}
+            <!-- <span class="clearfix d-none d-sm-inline-block"> {{ request.user.username }} </span> -->
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink1">
+            <a class="dropdown-item" href="/user-profile"><img src="{% static 'img/svg/USER_ICON.svg' %}"> User
+              Profile</a>
+            <a class="dropdown-item" href="{% url 'core:order-history' %}"><img
+                src="{% static 'img/svg/ORDER_HISTORY_ICON.svg' %}"> Order History</a>
+            <a class="dropdown-item" href="{% url 'core:favorites-summary' %}"> <img
+                src="{% static 'img/svg/FAVORITE_SELECTED.svg' %}"> Favorites</a>
+            <a class="dropdown-item" href="{% url 'account_logout' %}"><img
+                src="{% static 'img/svg/LOGOUT_ICON.svg' %}"> Logout</a>
+          </div>
+        </div>
+      </li>
+      <!-- <li class="nav-item">
+    <a class="nav-link waves-effect" href="{% url 'account_logout' %}">
+      <span class="clearfix d-none d-sm-inline-block"> Logout </span>
+    </a>
+   </li> -->
+    </ul>
+
+    {% else %}
+    <ul class="navbar-nav nav-flex-icons d-block d-sm-block d-md-none ml-auto">
+      <li class="nav-item">
+        <a class="nav-link waves-effect" href="{% url 'account_login' %}">
+          <span> Login </span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link waves-effect" href="{% url 'account_signup' %}">
+          <span> Signup </span>
+        </a>
+      </li>
+    </ul>
+    {% endif %}
+
+    <!-- </ul> -->
+
+    <!-- end mobile -->
+    <!-- Search Bar -->
+    
+    {% if current_url is None %}
+
+    {% else %}
+
+    <form class="nav-flex-icons form-inline" method="get" style="width:100%;">
+
+      <div class="input-group" style="width: 100%;">
+
+        <div style="width:calc(100% - 49px);">
+          <input class="form-control" type="text" name="title" id="id_title" placeholder="Search" style="width:100%">
+        </div>
+
+        <div class="input-group-append ">
+          <button style="border: none; background-color: #FFD215; padding-left: 0; padding-right: 0;" type="submit"><img
+              src="{% static 'img/search_button.png' %}"></button>
+        </div>
+      </div>
+
+      <!-- <div class="input-group">
+        <input style="height: 3em;" class="form-control" type="text" name="title" id="id_title" placeholder="Search">
+        <div class="input-group-append">
+          <button style="height: 3em;" type="button"><img src="{% static 'img/search_button.png' %}"></button> </div>
+      </div> -->
+    </form>
+    {% endif %}
+   
+
+    <!-- Links -->
+    <div class="text-right" id="navbarSupportedContent">
+
+      <!-- Left -->
+
+
+
+      <ul class="navbar-nav">
+        {% comment %}
+        <li class="nav-item active">
+          <a class="nav-link waves-effect" href="/">Home
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href="/checkout">
+            Checkout</a>
+        </li> {% endcomment %}
+      </ul>
+
+
+      <!-- Right -->
+      <div class="d-none d-sm-none d-md-none d-lg-block">
+        <ul class="navbar-nav nav-flex-icons">
+          {% if request.user.is_authenticated %}
+          <div>
+            <li class="nav-item" id="cart_no2">
+              <a href="{% url 'core:order-summary' %}" class="nav-link waves-effect">
+                <div class="view overlay" style="width:28px;height:25px;position:absolute;right:0;top:0;z-index:100;">
+                  <span class="badge badge-pill red z-depth-1 mr-1">
+                    {{ request.user|cart_item_count }} </span>
+                </div>
+                <img src="{% static 'img/shopping_cart_icon.png' %}">
+
+                <!-- <i class="fas fa-shopping-cart"></i>
+            <span class="clearfix d-none d-sm-inline-block"> Cart </span> -->
+              </a>
+            </li>
+          </div>
+          {% notifications_unread as unread_count %}
+          <div class="dropdown">
+            <li class="nav-item">
+              <a href="#" class="nav-link waves-effect" role="button" id="dropdownMenuLink1" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <div class="view overlay" style="width:25px;height:25px;position:absolute;right:0;top:0;z-index:100;">
+                  <span class="badge badge-pill red z-depth-1 mr-1"> {{ unread_count }} </span>
+                </div>
+                <img src="{% static 'img/bell_icon_icon.png' %}">
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton"
+                  style="overflow-y: auto; max-height: 200px;">
+                  {% for q in queryset %}
+                  <a class="dropdown-item" href="{% url 'core:mark-read' q.pk %}"> {{ q.verb }}
+                    ({{ q.timestamp|timesince }}
+                    ago)</a>
+                  {% endfor %}
+                </div>
+
+                <!-- <i class="fas fa-shopping-cart"></i>
+            <span class="clearfix d-none d-sm-inline-block"> Cart </span> -->
+              </a>
+            </li>
+          </div>
+
+
+          <!--was here-->
+          <li class="nav-item">
+            <div class="dropdown">
+              <a class=" nav-link waves-effect dropdown-toggle" href="#" id="dropdownMenuLink2" data-toggle="dropdown"
+                aria-haspopup="true">
+                {% if user.userprofile.image == "default.jpg"  %}
+                <img src="{% static 'img/user_profile.png' %}">
+                {% else %}
+                <img src="{{ user.userprofile.image.url }}"
+                  style="border:1px solid; border-color: #0000AD; border-radius: 50%;height:40px; width:40px; object-fit: cover; ">
+                {% endif %}
+                <!-- <span class="clearfix d-none d-sm-inline-block"> {{ request.user.username }} </span> -->
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink2">
+                <a class="dropdown-item" href="/user-profile"><img src="{% static 'img/svg/USER_ICON.svg' %}"> User
+                  Profile</a>
+                <a class="dropdown-item" href="{% url 'core:order-history' %}"><img
+                    src="{% static 'img/svg/ORDER_HISTORY_ICON.svg' %}"> Order History</a>
+                <a class="dropdown-item" href="{% url 'core:favorites-summary' %}"><img
+                    src="{% static 'img/svg/FAVORITE_SELECTED.svg' %}"> Favorites</a>
+                <a class="dropdown-item" href="{% url 'account_logout' %}"><img
+                    src="{% static 'img/svg/LOGOUT_ICON.svg' %}"> Logout</a>
+              </div>
+            </div>
+          </li>
+          <!-- <li class="nav-item">
+          <a class="nav-link waves-effect" href="{% url 'account_logout' %}">
+            <span class="clearfix d-none d-sm-inline-block"> Logout </span>
+          </a>
+        </li> -->
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'account_login' %}">
+              <span class="clearfix d-none d-sm-inline-block"> Login </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'account_signup' %}">
+              <span class="clearfix d-none d-sm-inline-block"> Signup </span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+      <!--  -->
+    </div>
+
+
+
+  </div>
+
+
+</nav>
+
+
+{% if messages %}
+
+{% if permanent %}
+<div class="toast overlay" data-autohide="false" style="position: fixed; top: 8rem; right: 5rem; z-index: 1200;">
+
+  {% else %}
+  <div class="toast overlay" style="position: fixed; top: 8rem; right: 5rem; z-index: 1200;">
+
+    {% endif %}
+    {% for message in messages %}
+
+    {% ifchanged %}
+
+
+    <div class="toast-body alert-{{message.tags}}">
+      {{message}}
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    {% endifchanged %}
+    {% endfor %}
+  </div>
+
+
+
+  {% endif %}
+
+
+
+  <!-- <div class=" alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"
+    style="position: absolute; z-index:1000; top:10vh; width:100%; text-align:center; font-size: small;">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div> -->

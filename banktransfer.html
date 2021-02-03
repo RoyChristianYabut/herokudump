@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block extra_head %}
+<style>
+    .navbarHeight {
+        height: 130px !important;
+    }
+
+
+
+    .stripeBtn2 {
+        text-align: center;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+        text-decoration: none;
+
+        white-space: nowrap;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+        border-radius: 4px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.025em;
+        text-decoration: none;
+        -webkit-transition: all 150ms ease;
+        transition: all 150ms ease;
+        float: left;
+        width: 100%
+    }
+
+    button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+
+    }
+
+    a:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+
+    }
+
+    @media (max-width: 365px) {
+        .navbarHeight {
+            height: 130px !important;
+        }
+
+        .stripeBtn2 {
+            font-size: 12px;
+        }
+
+        .btFontSize {
+            font-size: small
+        }
+
+        .sizeFont {
+            font-size: x-large;
+        }
+    }
+</style>
+{% endblock extra_head %}
+
+{% block content %}
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<nav class="navbar view overlay navbarHeight"
+    style="position: absolute; top:0; left:0; right:0;background-color: #000083;">
+    <div style="color:white;  position: absolute; bottom:0; left:0; right:0;text-align:center;width: 100%;
+    padding-right: 15px;padding-left: 15px;margin-right: auto;margin-left: auto;">
+        <h3 class="sizeFont">Bank Transfer</h3>
+    </div>
+</nav>
+<div class="container wow fadeIn mb-5">
+
+
+    <div class="col-md-12 ">
+        <ul class="list-group mb-3 z-depth-1 mt-5">
+            <li class="list-group-item d-flex ">
+                <span class="mr-auto btFontSize">Bank Name</span>
+                <strong class="ml-auto btFontSize" style="text-align: right;">BPI(Bank of the Philippine
+                    Island)</strong>
+            </li>
+            <li class="list-group-item d-flex ">
+                <span class="mr-auto btFontSize">Account Type</span>
+                <strong class="ml-auto btFontSize">CORPORATE</strong>
+            </li>
+            <li class="list-group-item d-flex ">
+                <span class="mr-auto btFontSize">Account Name</span>
+                <strong class="ml-auto btFontSize" style="text-align: right;">ROY PLAZA CORPORATION</strong>
+            </li>
+            <li class="list-group-item d-flex ">
+                <span class="mr-auto btFontSize">Account Number</span>
+                <strong class="ml-auto btFontSize">9391-0081-64</strong>
+            </li>
+        </ul>
+        <div>
+            <h5>Proof of Payment</h5>
+            <p class="text-muted">Please upload Proof of Payment here (photo of the deposit slip or screenshot of bank
+                transfer)</p>
+            <button type="button" class="update-proof" style="background: none; color: inherit;   border: none;  padding: 0; font: inherit;
+            cursor: pointer;
+            outline: inherit; " data-id="{% url 'core:bankproofupload' order.pk %}" on>
+                {%if order.proof_of_purchase%}
+                <img src="{{ order.proof_of_purchase.url }}"
+                    style="border:1px solid black; border-radius: 25%;height:100px; width:100px; object-fit: cover; ">
+                {% else %}
+                <img src="{{ order.proof_of_purchase.url }}"
+                    style="border:1px solid black; border-radius: 25%;height:100px; width:100px; object-fit: cover; ">
+                {%endif%}
+            </button>
+        </div>
+        <div style="float:right;">
+
+            <form method="post">
+                {% csrf_token %}
+                {% if order.paid %}
+                <button class="stripeBtn2 " type="submit"
+                    style="padding:none;border-radius: 24px;color: white !important;background-color: #0000AD !important;">Send
+                    Payment</button>
+                <div id="card-errors" role="alert"></div>
+            </form>
+            {% else %}
+            </form>
+            <div class='ttop' data-toggle="tooltip" data-placement="auto top" title="Please submit proof of purchase.">
+                <button class="stripeBtn2 "
+                    style="padding:none;border-radius: 24px;color: white !important;background-color: gray !important;">Send
+                    Payment</button>
+            </div>
+            <div id="card-errors" role="alert"></div>
+            {% endif %}
+
+
+
+
+        </div>
+        <br>
+
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,747 @@
+{% load static %}
+{% for family in page_obj %}
+<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-6 mb-4">
+
+
+    <!-- CARD WHEN ITEM QUANTITY == 0 -->
+    {% if family.num_items == 1 %}
+    {% with family.item_set.first as item %}
+    {% if item.quantity < 1 %} <div class="card d-flex align-items-stretch cardHeight" style="height:400px"
+        id="{{item.slug}}X">
+        <div class="mx-auto  d-flex justify-content-center align-items-center imageSize"
+            style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+
+            <img src="{{ item.image.url }}" class="align-self-center imageSize" style="z-index:1; max-width:200px; 
+                    max-height:206px;">
+            <div class="overlay"
+                style="height:50px;position:absolute;left:0;top:0;z-index:40;padding-top:5px;padding-left:5px;">
+                <h5 style="font-size: medium;font-weight: 300;">
+                    <strong>
+
+                        {% if item.product_type == 1 %}
+                        <span class="badge badge-pill primary-color">Imported</span>
+                        {% elif item.product_type == 2 %}
+                        <span class="badge badge-pill success-color">Local Product</span>
+                        {%endif%}
+
+                    </strong>
+                </h5>
+
+            </div>
+
+        </div>
+        <div class="card-body text-left" style="padding-bottom: 0;">
+            <h5 class="titleFont" style="font-size:medium; font-weight:300;">
+                {{item.title}}
+            </h5>
+            <h4 style="font-size: medium;font-weight: 300; color: #0000AD;">
+                <strong>
+
+                    {% if item.discount_price %}
+                    <del>₱{{ object.discount_price|floatformat:2 }}</del>
+
+                    ₱{{ item.price|floatformat:2 }}
+                    {% else %}
+                    {% if item.unique_weights > 1 %}
+                    {{ item.price|floatformat:2 }}/{{ item.packing}}
+                    {% else %}
+                    {{ item.price|floatformat:2 }}
+                    {% endif %}
+
+                    {% endif %}
+                </strong>
+            </h4>
+        </div>
+        {% if item.remarks %}
+        <div>
+            <h5 class="rmkFont">{{ item.remarks }}</h5>
+        </div>
+        {% endif %}
+        <div class="card-footer" style="height:31px;">
+            {% if request.user.is_authenticated %}
+            {% if favorite is None %}
+            <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+                <a href='#!' data-id="{% url 'core:add-to-favorite-home' item.slug %}" data-locate="{{item.slug}}"
+                    class="add_to_favorite"><img src="{% static 'img/svg/FAVORITE_UNSELECTED.svg' %}" class="iconSize"
+                        style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+            </div>
+
+            {% else %}
+            <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+                <a href='#!' data-id="{% url 'core:add-to-favorite-home' item.slug %}" data-locate="{{item.slug}}"
+                    class="add_to_favorite"><img src="{% static 'img/svg/FAVORITE_UNSELECTED.svg' %}" class="iconSize"
+                        style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+            </div>
+            {% for ordered_item in favorite %}
+            {% if ordered_item == item.slug %}
+            <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+                <a href='#!' data-id="{% url 'core:remove-from-favorites' item.slug %}" data-locate="{{item.slug}}"
+                    class="remove_from_favorites"><img src="{% static 'img/svg/FAVORITE_SELECTED.svg' %}"
+                        class="iconSize" style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+            </div>
+
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            {% endif %}
+            {% if item.quantity < 1 %} <div
+                style="position:absolute;top:100;right:0;bottom:0;z-index:40;padding-right: 4px;">
+                <h5 style="font-size: medium;font-weight: 300; " class="titleFont">
+                    <strong>
+
+                        <span class="badge badge-pill danger-color">Not Available</span>
+
+
+
+                    </strong>
+                </h5>
+        </div>
+        {% endif %}
+</div>
+</div>
+
+<!-- CARD WHEN ITEM QUANTITY > 0 -->
+{% else %}
+<div class="card d-flex align-items-stretch cardHeight" style="height:400px" id="{{item.slug}}X"
+    data-max="{% if item.quantity > 0 %}{{item.quantity}}{% endif %}">
+    <div class="mx-auto  d-flex justify-content-center align-items-center imageSize"
+        style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+        <a href=" {{ item.get_absolute_url }}">
+            <img src="{{ item.image.url }}" class="align-self-center imageSize" style="z-index:1; max-width:200px; 
+                    max-height:206px;">
+
+            <div class="overlay"
+                style="height:50px;position:absolute;left:0;top:0;z-index:40;padding-top:5px;padding-left:5px;">
+                <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                    <strong>
+
+                        {% if item.label == 'F' %}
+                        <span class="badge badge-pill primary-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'S' %}
+                        <span class="badge badge-pill success-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'D' %}
+                        <span class="badge badge-pill success-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'L' %}
+                        <span class="badge badge-pill warning-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'O' %}
+                        <span class="badge badge-pill danger-color">{{ item.get_label_display }}</span>
+                        {%endif%}
+
+                    </strong>
+                </h5>
+                {% if item.product_type != 0 %}
+                <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                    <strong>
+
+                        {% if item.product_type == 1 %}
+                        <span class="badge badge-pill primary-color">Imported</span>
+                        {% elif item.product_type == 2 %}
+                        <span class="badge badge-pill success-color">Local Product</span>
+                        {%endif%}
+
+                    </strong>
+                </h5>
+                {% else %}
+                {% endif %}
+
+            </div>
+
+
+            <!--  -->
+            <div class="mask rgba-white-slight"></div>
+        </a>
+    </div>
+    <div class="card-body text-left" style="padding-bottom: 0;">
+        <h5 class="titleFont" style="font-size: medium;font-weight: 300;">
+            <strong>
+                <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
+
+                </a>
+            </strong>
+        </h5>
+
+        <h4 style="font-size: medium; font-weight: 300; color: #0000AD;">
+            <strong>
+                {% if item.discount_price %}
+                <del>₱{{ object.discount_price|floatformat:2 }}</del>
+
+                ₱{{ item.price|floatformat:2 }}
+
+
+                {% else %}
+                {% if item.unique_weights > 1 %}
+                {{ item.price|floatformat:2 }}/{{ item.packing}}
+                {% else %}
+                {{ item.price|floatformat:2 }}
+                {% endif %}
+
+                {% endif %}
+            </strong>
+        </h4>
+    </div>
+    {% if item.remarks %}
+    <div>
+        <h5 class="rmkFont">{{ item.remarks }}</h5>
+    </div>
+    {% endif %}
+    <div class="card-footer" style="height:31px;">
+        {% if request.user.is_authenticated %}
+        {% if favorite is None %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:add-to-favorite-home' item.slug %}" data-locate="{{item.slug}}"
+                class="add_to_favorite"><img src="{% static 'img/svg/FAVORITE_UNSELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+        </div>
+
+        {% else %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:add-to-favorite-home' item.slug %}" data-locate="{{item.slug}}"
+                class="add_to_favorite"><img src="{% static 'img/svg/FAVORITE_UNSELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+        </div>
+        {% for ordered_item in favorite %}
+        {% if ordered_item == item.slug %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:remove-from-favorites' item.slug %}" data-locate="{{item.slug}}"
+                class="remove_from_favorites"><img src="{% static 'img/svg/FAVORITE_SELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+        </div>
+
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+
+
+
+
+        {% for ordered_item in ordered %}
+        {% if ordered_item.0 == item.slug %}
+        <div style="position:absolute;top:100;right:0;bottom:0;z-index:40;">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href='#!' class=" extra_button remove_single_from_cart" slug="{{item.slug}}"
+                    data-id="{% url 'core:remove-single-item-from-cart-home' item.slug %}"><img
+                        src="{% static 'img/svg/MINUS.svg' %}" class="iconSize" style="height:25px; width:25px;"></a>
+                <input id="{{ordered_item.0}}" class="inputNumber titleFont inputWidth" type="number"
+                    value="{{ ordered_item.1 }}" min="1" max="100"
+                    oninput="javascript: if (this.value.length > this.maxLength){ this.value = this.value.slice(0, this.maxLength);}  if (this.value < 0) this.value = 0;"
+                    maxlength="3" required
+                    style="width: 50px; border: 0;  box-shadow: none; outline:none; text-align: right;" />
+                <a href='#!' class="extra_button add_to_cart" slug="{{item.slug}}"
+                    data-max="{% if item.quantity > 0 %}{{item.quantity}}{% endif %}"
+                    data-id="{% url 'core:add-to-cart-home' item.slug %}"><img src="{% static 'img/svg/PLUS.svg' %}"
+                        class="iconSize" style="height:25px; width:25px;">
+                </a>
+                <!-- <a href='#!' data-id="{% url 'core:add-to-cart-home' item.slug %}"
+                          class="btn btn-primary btn-lg extra_button"><span class="fa-stack"> &nbsp;<i
+                              class="fa fa-plus"></i> &nbsp;</a> -->
+            </div>
+        </div>
+
+        {% endif %}
+        {% endfor %}
+        {% if item.slug not in orderedSlug %}
+        <div style="position:absolute;top:100;right:0;bottom:0;z-index:39;">
+            <a href='#!' data-id="{% url 'core:add-to-cart-home' item.slug %}" slug="{{item.slug}}"
+                class="extra_button add_to_cart_home"><img src="{% static 'img/svg/PLUS.svg' %}"
+                    style="height:25px; width:25px;">
+            </a>
+        </div>
+
+        {% endif %}
+
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+
+
+
+
+{% endwith %}
+
+{% else %}
+
+
+<!-- CARD FOR FAMILIES == 0 -->
+{% for item in family.item_set.all %}
+<!-- id='hideable_item_card{{item.slug}}{{forloop.counter0}}' -->
+{% if forloop.counter == 1 %}
+
+<div class='{{family.id}}' id="{{item.slug}}X">
+    <div class="card d-flex align-items-stretch cardHeight" style="height:400px">
+        {% if item.quantity < 1 %} <div class="mx-auto  d-flex justify-content-center imageSize"
+            style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+            <a href=" {{ item.get_absolute_url }}">
+                <img src="{{ item.image.url }}" class="align-self-center imageSize" style="z-index:1; max-width:200px; 
+                    max-height:206px;">
+                <div class="overlay"
+                    style="height:50px;position:absolute;left:0;top:0;z-index:40;padding-top:5px;padding-left:5px;">
+                    <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                        <strong>
+
+                            {% if item.product_type == 1 %}
+                            <span class="badge badge-pill primary-color">Imported</span>
+                            {% elif item.product_type == 2 %}
+                            <span class="badge badge-pill success-color">Local Product</span>
+                            {%endif%}
+
+                        </strong>
+                    </h5>
+
+                </div>
+            </a>
+    </div>
+    {% else %}
+    <div class="mx-auto  d-flex justify-content-center imageSize"
+        style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+        <a href=" {{ item.get_absolute_url }}">
+            <img src="{{ item.image.url }}" class="align-self-center imageSize" style="z-index:1; max-width:200px; 
+                    max-height:206px;">
+            <div class="overlay"
+                style="height:50px;position:absolute;left:0;top:0;z-index:40;padding-top:5px;padding-left:5px;">
+                <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                    <strong>
+
+                        {% if item.label == 'F' %}
+                        <span class="badge badge-pill primary-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'S' %}
+                        <span class="badge badge-pill success-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'D' %}
+                        <span class="badge badge-pill success-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'L' %}
+                        <span class="badge badge-pill warning-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'O' %}
+                        <span class="badge badge-pill danger-color">{{ item.get_label_display }}</span>
+                        {%endif%}
+
+                    </strong>
+                </h5>
+                {% if item.product_type != 0 %}
+                <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                    <strong>
+
+                        {% if item.product_type == 1 %}
+                        <span class="badge badge-pill primary-color">Imported</span>
+                        {% elif item.product_type == 2 %}
+                        <span class="badge badge-pill success-color">Local Product</span>
+                        {%endif%}
+
+                    </strong>
+                </h5>
+                {% else %}
+                {% endif %}
+
+            </div>
+
+            <div class="mask rgba-white-slight"></div>
+        </a>
+    </div>
+    {% endif %}
+    <div class="card-body text-left " style="padding-bottom: 0;">
+
+        <h5 class="titleFont" style="font-size: medium; font-weight: 300;">
+            <strong>
+                {% if item.quantity < 1 %} <a href="#!" class="dark-grey-text">{{ family.title }}
+
+                    </a>
+                    {% else %}
+                    <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ family.title }}
+
+                    </a>
+                    {% endif %}
+
+            </strong>
+        </h5>
+        <h4 style="font-size: medium; font-weight: 300; color: #0000AD;">
+            <strong>
+                {% if item.discount_price %}
+                <del>₱{{ object.discount_price|floatformat:2 }}</del>
+
+                ₱{{ item.price|floatformat:2 }}
+
+                {% else %}
+                {% if item.unique_weights > 1 %}
+                {{ item.price|floatformat:2 }}/{{ item.packing}}
+                {% else %}
+                {{ item.price|floatformat:2 }}
+                {% endif %}
+
+                {% endif %}
+            </strong>
+        </h4>
+        <div class="btn-group d-flex flex-wrap justify-content-start">
+            {% for item1 in family.item_set.all %}
+
+            {% if item1.slug == item.slug %}
+            <button
+                style="box-shadow: none; min-width:33px;max-width: 55px;padding-bottom: 4px; padding-top: 4px; padding-left: 5px;padding-right: 5px; margin-right: 2px;border-width: 1px; background-color:#F8F8F8;"
+                type="button" class="btn btn-primary btn-sm flex-shrink-1 btnFont"
+                onclick="itemShowingFunc('{{family.id}}','{{forloop.counter0}}')">{{ item1.ftag1 }}</button>
+            {% else %}
+            <button
+                style="box-shadow: none; min-width:33px;max-width: 55px;padding-bottom: 4px; padding-top: 4px; padding-left: 5px;padding-right: 5px; margin-right: 2px;border-width: 1px; background-color:#F8F8F8;"
+                type="button" class="btn  btn-sm flex-shrink-1 btnFont"
+                onclick="itemShowingFunc('{{family.id}}','{{forloop.counter0}}')">{{ item1.ftag1 }}</button>
+            {% endif %}
+
+            {% endfor %}
+        </div>
+    </div>
+    {% if item.remarks %}
+    <div>
+        <h5 class="rmkFont">{{ item.remarks }}</h5>
+    </div>
+    {% endif %}
+    <div class="card-footer" style="height:31px;">
+        {% if request.user.is_authenticated %}
+        {% if favorite is None %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:add-to-favorite-home' item.slug %}" data-locate="{{item.slug}}"
+                class="add_to_favorite"><img src="{% static 'img/svg/FAVORITE_UNSELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+        </div>
+
+        {% else %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:add-to-favorite-home' item.slug %}" data-locate="{{item.slug}}"
+                class="add_to_favorite"><img src="{% static 'img/svg/FAVORITE_UNSELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+        </div>
+        {% for ordered_item in favorite %}
+        {% if ordered_item == item.slug %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:remove-from-favorites' item.slug %}" data-locate="{{item.slug}}"
+                class="remove_from_favorites"><img src="{% static 'img/svg/FAVORITE_SELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+        </div>
+
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+
+
+
+
+        {% for ordered_item in ordered %}
+
+        {% if ordered_item.0 == item.slug %}
+        <div style="position:absolute;right:0;top:100;bottom:0;z-index:40;">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href='#!' class=" extra_button remove_single_from_cart" slug="{{item.slug}}"
+                    data-id="{% url 'core:remove-single-item-from-cart-home' item.slug %}"><img
+                        src="{% static 'img/svg/MINUS.svg' %}" class="iconSize" style="height:25px; width:25px;"></a>
+                <input id="{{ordered_item.0}}" class="inputNumber titleFont inputWidth" type="number"
+                    value="{{ ordered_item.1 }}" min="1" max="100"
+                    oninput="javascript: if (this.value.length > this.maxLength){ this.value = this.value.slice(0, this.maxLength);}  if (this.value < 0) this.value = 0;"
+                    maxlength="3" required
+                    style="width: 50px; border: 0;  box-shadow: none; outline:none; text-align: right;" />
+                <a href='#!' class=" extra_button add_to_cart" slug="{{item.slug}}"
+                    data-max="{% if item.quantity > 0 %}{{item.quantity}}{% endif %}"
+                    data-id="{% url 'core:add-to-cart-home' item.slug %}"><img src="{% static 'img/svg/PLUS.svg' %}"
+                        class="iconSize" style="height:25px; width:25px;">
+                </a>
+                <!-- <a href='#!' data-id="{% url 'core:add-to-cart-home' item.slug %}"
+                          class="btn btn-primary btn-lg extra_button"><span class="fa-stack"> &nbsp;<i
+                              class="fa fa-plus"></i> &nbsp;</a> -->
+            </div>
+        </div>
+
+
+        {% endif %}
+        {% endfor %}
+
+        {% if item.slug not in orderedSlug and item.quantity > 0%}
+        <div style="position:absolute;top:100;right:0;bottom:0;z-index:39;">
+            <a href='#!' data-id="{% url 'core:add-to-cart-home' item.slug %}" slug="{{item.slug}}"
+                class="extra_button add_to_cart_home"><img src="{% static 'img/svg/PLUS.svg' %}"
+                    style="height:25px; width:25px;">
+            </a>
+        </div>
+
+        {% endif %}
+
+
+        {% endif %}
+        {% if item.quantity < 1 %} <div
+            style="position:absolute;top:100;right:0;bottom:0;z-index:40;padding-right: 4px;">
+            <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                <strong>
+
+                    <span class="badge badge-pill danger-color">Not Available</span>
+
+
+                </strong>
+            </h5>
+    </div>
+    {% endif %}
+</div>
+
+</div>
+<!-- {% if request.user.is_authenticated %}
+
+                  {% for ordered_item in ordered %}
+                  {% if ordered_item.0 == item.slug %}
+                  <h6 style="color:red">
+                    ordered:
+                    {{ ordered_item.1 }}
+                  </h6>
+                  {% endif %}
+                  {% endfor %}
+
+                  {% endif %} -->
+
+</div>
+
+{% else %}
+<div class='{{family.id}}' style="display:none; " id="{{item.slug}}X">
+    <div class="card d-flex align-items-stretch cardHeight" style="height:400px">
+        {% if item.quantity < 1 %} <div class="mx-auto  d-flex justify-content-center imageSize"
+            style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+            <img src="{{ item.image.url }}" class="align-self-center imageSize" style="z-index:1; max-width:200px; 
+                    max-height:206px;">
+            <div class="overlay"
+                style="height:50px;position:absolute;left:0;top:0;z-index:40;padding-top:5px;padding-left:5px;">
+
+                <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                    <strong>
+
+                        {% if item.product_type == 1 %}
+                        <span class="badge badge-pill primary-color">Imported</span>
+                        {% elif item.product_type == 2 %}
+                        <span class="badge badge-pill success-color">Local Product</span>
+                        {%endif%}
+
+                    </strong>
+                </h5>
+
+
+            </div>
+    </div>
+    {% else %}
+    <div class="mx-auto  d-flex justify-content-center imageSize"
+        style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+        <img src="{{ item.image.url }}" class="align-self-center imageSize" style="z-index:1; max-width:200px; 
+                    max-height:206px;">
+        <a href=" {{ item.get_absolute_url }}">
+
+            <div class="overlay"
+                style="height:50px;position:absolute;left:0;top:0;z-index:40;padding-top:5px;padding-left:5px;">
+                <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                    <strong>
+
+                        {% if item.label == 'F' %}
+                        <span class="badge badge-pill primary-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'S' %}
+                        <span class="badge badge-pill success-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'D' %}
+                        <span class="badge badge-pill success-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'L' %}
+                        <span class="badge badge-pill warning-color">{{ item.get_label_display }}</span>
+                        {% elif item.label == 'O' %}
+                        <span class="badge badge-pill danger-color">{{ item.get_label_display }}</span>
+                        {%endif%}
+
+                    </strong>
+                </h5>
+                {% if item.product_type != 0 %}
+                <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                    <strong>
+
+                        {% if item.product_type == 1 %}
+                        <span class="badge badge-pill primary-color">Imported</span>
+                        {% elif item.product_type == 2 %}
+                        <span class="badge badge-pill success-color">Local Product</span>
+                        {%endif%}
+
+                    </strong>
+                </h5>
+                {% else %}
+                {% endif %}
+
+            </div>
+            <div class="mask rgba-white-slight"></div>
+        </a>
+    </div>
+    {% endif %}
+    <div class="card-body text-left" style="padding-bottom: 0;">
+        <h5 class="titleFont" style="font-size: medium; font-weight: 300;">
+            <strong>
+                {% if item.quantity < 1 %} <a href="#!" class="dark-grey-text">{{ family.title }}
+
+                    </a>
+                    {% else %}
+                    <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ family.title }}
+
+                    </a>
+                    {% endif %}
+            </strong>
+        </h5>
+
+        <h4 style="font-size: medium; font-weight: 300; color: #0000AD;">
+            <strong>
+                {% if item.discount_price %}
+                <del>₱{{ object.discount_price|floatformat:2 }}</del>
+
+                ₱{{ item.price|floatformat:2 }}
+
+
+                {% else %}
+                {% if item.unique_weights > 1 %}
+                {{ item.price|floatformat:2 }}/{{ item.packing}}
+                {% else %}
+                {{ item.price|floatformat:2 }}
+                {% endif %}
+
+                {% endif %}
+            </strong>
+        </h4>
+        <div class="btn-group d-flex flex-wrap justify-content-start">
+            {% for item1 in family.item_set.all %}
+
+            {% if item1.slug == item.slug %}
+            <button
+                style="box-shadow: none; min-width:33px;max-width: 55px; padding-bottom: 4px; padding-top: 4px; padding-left: 5px;padding-right: 5px; margin-right: 2px;border-width: 1px; background-color:#F8F8F8;"
+                type="button" class="btn btn-primary btn-sm flex-shrink-1 btnFont"
+                onclick="itemShowingFunc('{{family.id}}','{{forloop.counter0}}')">{{ item1.ftag1 }}</button>
+            {% else %}
+            <button
+                style="box-shadow: none; min-width:33px;max-width: 55px;padding-bottom: 4px; padding-top: 4px; padding-left: 5px;padding-right: 5px; margin-right: 2px;border-width: 1px; background-color:#F8F8F8;"
+                type="button" class="btn  btn-sm flex-shrink-1 btnFont"
+                onclick="itemShowingFunc('{{family.id}}','{{forloop.counter0}}')">{{ item1.ftag1 }}</button>
+            {% endif %}
+
+            {% endfor %}
+        </div>
+    </div>
+    {% if item.remarks %}
+    <div>
+        <h5 class="rmkFont">{{ item.remarks }}</h5>
+    </div>
+    {% endif %}
+    <div class="card-footer" style="height:31px;">
+        {% if request.user.is_authenticated %}
+        {% if favorite is None %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:add-to-favorite-home' item.slug %}" data-locate="{{item.slug}}"
+                class="add_to_favorite"><img src="{% static 'img/svg/FAVORITE_UNSELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"> </a>
+
+        </div>
+
+        {% else %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:add-to-favorite-home' item.slug %}" data-locate="{{item.slug}}"
+                class="add_to_favorite"><img src="{% static 'img/svg/FAVORITE_UNSELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+        </div>
+        {% for ordered_item in favorite %}
+        {% if ordered_item == item.slug %}
+        <div style="width:50px;position:absolute;top:100;left:0;bottom:0;z-index:40;">
+            <a href='#!' data-id="{% url 'core:remove-from-favorites' item.slug %}" data-locate="{{item.slug}}"
+                class="remove_from_favorites"><img src="{% static 'img/svg/FAVORITE_SELECTED.svg' %}" class="iconSize"
+                    style="padding-bottom:5px; height:25px; width:25px;"></a>
+
+        </div>
+
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+
+
+
+
+        {% for ordered_item in ordered %}
+        {% if ordered_item.0 == item.slug %}
+        <div style="position:absolute;top:100;right:0;bottom:0;z-index:40;">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href='#!' class=" extra_button remove_single_from_cart" slug="{{item.slug}}"
+                    data-id="{% url 'core:remove-single-item-from-cart-home' item.slug %}"><img
+                        src="{% static 'img/svg/MINUS.svg' %}" class="iconSize" style="height:25px; width:25px;"></a>
+                <input id="{{ordered_item.0}}" class="inputNumber titleFont inputWidth" type="number"
+                    value="{{ ordered_item.1 }}" min="1" max="100"
+                    oninput="javascript: if (this.value.length > this.maxLength){ this.value = this.value.slice(0, this.maxLength);}  if (this.value < 0) this.value = 0;"
+                    maxlength="3" required
+                    style="width: 50px; border: 0;  box-shadow: none; outline:none; text-align: right;" />
+                <a href='#!' class=" extra_button add_to_cart" slug="{{item.slug}}"
+                    data-max="{% if item.quantity > 0 %}{{item.quantity}}{% endif %}"
+                    data-id="{% url 'core:add-to-cart-home' item.slug %}"><img src="{% static 'img/svg/PLUS.svg' %}"
+                        class="iconSize" style="height:25px; width:25px;">
+                </a>
+                <!-- <a href='#!' data-id="{% url 'core:add-to-cart-home' item.slug %}"
+                          class="btn btn-primary btn-lg extra_button"><span class="fa-stack"> &nbsp;<i
+                              class="fa fa-plus"></i> &nbsp;</a> -->
+            </div>
+        </div>
+
+
+        {% endif %}
+        {% endfor %}
+        {% if item.slug not in orderedSlug and item.quantity > 0%}
+        <div style="position:absolute;top:100;right:0;bottom:0;z-index:39;">
+            <a href='#!' data-id="{% url 'core:add-to-cart-home' item.slug %}" slug="{{item.slug}}"
+                class="extra_button add_to_cart_home"><img src="{% static 'img/svg/PLUS.svg' %}"
+                    style="height:25px; width:25px;">
+            </a>
+        </div>
+
+        {% endif %}
+
+        {% endif %}
+        {% if item.quantity < 1 %} <div
+            style="position:absolute;top:100;right:0;bottom:0;z-index:40;padding-right: 4px;">
+            <h5 style="font-size: medium;font-weight: 300;" class="titleFont">
+                <strong>
+
+                    <span class="badge badge-pill danger-color">Not Available</span>
+
+
+                </strong>
+            </h5>
+    </div>
+    {% endif %}
+</div>
+</div>
+
+{% comment %}
+<!-- {% if request.user.is_authenticated %}
+
+                  {% for ordered_item in ordered %}
+                  {% if ordered_item.0 == item.slug %}
+                  <h6 style="color:red">
+                    ordered:
+                    {{ ordered_item.1 }}
+                  </h6>
+                  {% endif %}
+                  {% endfor %}
+
+                  {% endif %} -->
+{% endcomment %}
+</div>
+{% endif %}
+{% endfor %}
+
+{% endif %}
+
+
+
+
+</div>
+{% empty%}
+<div class="col-lg-4"></div>
+<div class="col-lg-4" style="text-align: center; font-weight: 600;">NO MATCHING ITEM FOUND</div>
+{% endfor %}

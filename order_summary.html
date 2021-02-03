@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% load index %}
+{% block extra_head %}
+<style>
+    .cart-header {
+        padding: 60px;
+        text-align: left;
+
+        color: white;
+        font-size: 20px;
+    }
+
+    .choices-header {
+        padding: 60px;
+        text-align: left;
+
+        color: white;
+        font-size: 20px;
+    }
+
+    .cart-header-image {
+        max-width: 35px;
+        max-height: 18px;
+    }
+</style>
+{% endblock extra_head %}
+{% block content %}
+
+<main>
+    <div class="container shadow-none">
+
+        <div class="choices-header" style="text-align: left; z-index:3;  width:100%;position: relative;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+        background: #e7e7e7;
+        border: 1px solid transparent;
+        border-radius: 24px; 
+        font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 12pt; color: #FFF;">
+            <a class='btn btnSize' id="bb0"
+                style="font-family: 'Poppins', sans-serif; font-weight: 700; border: 2px solid; border-color:#FFB600;color:white; background-color:#FFB600;border-radius: 24px;"
+                href='#!' onclick="itemShowingFunc('{{ object|length }}','pp0','#FFB600')">ALL</a>
+
+            {% for Carts in object %}
+            <a class='btn btnSize' id="bb{{forloop.counter}}"
+                style="font-family: 'Poppins', sans-serif; font-weight: 700; border: 2px solid; border-color:#{{ Carts.company.branding_color }}; background-color:#e7e7e7;border-radius: 24px;"
+                href='#!'
+                onclick="itemShowingFunc('{{ object|length }}','pp{{forloop.counter}}','#{{ Carts.company.branding_color }}')"><img
+                    class="cart-header-image" src="{{ Carts.company.logo.url }}" /></a>
+
+            {% endfor %}
+        </div>
+
+
+        {% for o in object %}
+        <div data={{forloop.counter}} id='pp{{forloop.counter}}'>
+            <div class="cart-header" style="text-align: left; z-index:3;  width:100%;position: relative;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+        background: #{{ o.company.branding_color}};
+        border: 1px solid transparent;
+        border-radius: 0.25rem; 
+        font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 12pt; color: #FFF;">
+                <img class="cart-header-image" src="{{ o.company.logo.url }}" />
+                {{ o.company.name }}
+            </div>
+
+            <div class="table-responsive text-nowrap" style="overflow-y: auto; max-height: 400px;">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"></th>
+                            <th scope="col">Item title</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for order_item in o.items.all %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td> <img src="{{ order_item.item.image.url }}" style="width:30px; height:30px;"></td>
+                            <td>{{ order_item.item.title}}</td>
+                            <td>₱{{ order_item.item.price|floatformat:2 }}</td>
+                            <td>
+                                <a href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><i
+                                        class="fas fa-minus mr-2"></i></a>
+                                <input id="{{order_item.item.slug}}" type="number" value="{{ order_item.quantity }}"
+                                    min="1" max="100"
+                                    oninput="javascript: if (this.value.length > this.maxLength){ this.value = this.value.slice(0, this.maxLength);}  if (this.value < 0) this.value = 0;"
+                                    maxlength="3" required />
+                                <a href="{% url 'core:add-to-cart' order_item.item.slug %}"><i
+                                        class="fas fa-plus ml-2"></i></a>
+                            </td>
+                            <td>
+                                {% if order_item.item.discount_price %}
+                                ₱{{ order_item.get_total_discount_item_price|floatformat:2 }}
+                                <span class="badge badge-primary">Saving
+                                    ₱{{ order_item.get_amount_saved|floatformat:2 }}</span>
+                                {% else %}
+                                ₱{{ order_item.get_total_item_price|floatformat:2 }}
+                                {% endif %}
+                                <a style='color: red;' href="{% url 'core:remove-from-cart' order_item.item.slug %}">
+                                    <i class="fas fa-trash float-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan='6'>Your cart is empty</td>
+                        </tr>
+
+
+                        {% endfor %}
+                        {% if o.coupon %}
+                        <tr>
+                            <td colspan="5"><b>Coupon</b>: {{o.coupon.code}}</td>
+                            <td><b>-₱{{ o.get_coupon_amount|floatformat:2 }}</b></td>
+                        </tr>
+                        {% endif %}
+
+                    </tbody>
+                </table>
+                {% if not o.items.all %}
+                <ul>
+                    <li class=" d-flex justify-content-end" style="background-color:#F3F3F3">
+
+                        <a class='btn btnSize float-right'
+                            style="font-family: 'Poppins', sans-serif; font-weight: 700; color:white; background-color:#{{ o.company.branding_color }};border-radius: 24px;"
+                            href='/'>Continue
+                            shopping</a>
+                    </li>
+                </ul>
+                {% endif%}
+
+
+            </div>
+            {% if o.items.all %}
+            <div class="table-responsive text-nowrap shadow-none">
+                <span>
+                    <ul class="list-group mb-3 ">
+                        <div style="overflow-y: auto; max-height: 400px;">
+                            {% for order_item in order.items.all %}
+                            <li class="list-group-item d-flex justify-content-between ">
+                                <div>
+                                    <h6 class="my-0">{{ order_item.quantity }} x {{ order_item.item.title}}</h6>
+                                    <small class="text-muted">{{ order_item.item.description}}</small>
+                                </div>
+                                <span class="text-muted">₱{{ order_item.get_final_price|floatformat:2 }}</span>
+                            </li>
+                            {% endfor %}
+                            {% if order.coupon %}
+                            <li class="list-group-item d-flex justify-content-between" style="background-color:#F3F3F3">
+                                <div class="text-success">
+                                    <h6 class="my-0">Promo code</h6>
+                                    <small>{{ order.coupon.code }}</small>
+                                </div>
+                                <span class="text-success">-₱{{ order.get_coupon_amount|floatformat:2 }}</span>
+                            </li>
+                            {% endif %}
+                        </div>
+                        <li class="list-group-item d-flex justify-content-between" style="background-color:#F3F3F3">
+                            <span>Subtotal</span>
+                            <strong>₱{{ o.get_total|floatformat:2 }}</strong>
+                        </li>
+
+
+                        {% if rush_charge  is None  %}
+                        <li class="list-group-item d-flex justify-content-between" style="background-color:#F3F3F3">
+                            <span>Service Charge (FREE!)</span>
+                            <strong>({{ service|index:forloop.counter0|floatformat:2 }})</strong>
+                        </li>
+                        {% else %}
+
+                        <li class="list-group-item d-flex justify-content-between" style="background-color:#F3F3F3">
+                            <span>Service Charge (Rush Order)</span>
+                            <strong>({{ rush_charge|floatformat:2 }})</strong>
+                        </li>
+                        {% endif %}
+
+
+                        {% if delivery_charge  is None  %}
+
+                        {% else %}
+                        <li class="list-group-item d-flex justify-content-between" style="background-color:#F3F3F3">
+                            <span>Delivery Charge</span>
+                            <strong>({{ delivery_charge|floatformat:2 }})</strong>
+                        </li>
+                        {% endif %}
+
+                        <li class="list-group-item d-flex justify-content-between" style="background-color:#F3F3F3">
+                            <span>Total</span>
+                            <strong>₱{{ total|index:forloop.counter0|floatformat:2 }}</strong>
+                        </li>
+                        <li class=" d-flex justify-content-end" style="background-color:#F3F3F3">
+
+                            <a class='btn btnSize float-right'
+                                style="font-family: 'Poppins', sans-serif; font-weight: 700; border: 2px solid; color:#{{ o.company.branding_color }}; background-color:white; border-color: #{{ o.company.branding_color}}; border-radius: 24px;"
+                                onclick='backhref()'>Continue shopping</a>
+                            <a class='btn btnSize float-right'
+                                style="font-family: 'Poppins', sans-serif; font-weight: 700; color:white; background-color:#{{ o.company.branding_color }};border-radius: 24px;"
+                                href="{% url 'core:checkout' company_slug|index:forloop.counter0 %}">Proceed to
+                                checkout</a>
+                        </li>
+                    </ul>
+                    <!-- <table class="table">
+                        {% if o.get_total %}
+                        <tbody>
+                            <tr colspan="6">
+                                <td colspan="5"><b>Subtotal</b></td>
+
+
+                                <td width="14%"><b>₱{{ o.get_total|floatformat:2 }}</b></td>
+                            </tr>
+                            <tr colspan="6">
+
+                                <td colspan="5"><b>Service Charge</b> ({{ remarks }})</td>
+
+
+                                <td width="14%"><b>({{ service|floatformat:2 }})</b></td>
+
+                            </tr>
+                            <tr colspan="6">
+
+                                <td colspan="5"><b>Total</b></td>
+
+
+                                <td width="14%"><b>₱{{ total|floatformat:2 }}</b></td>
+
+                            </tr>
+                            <tr>
+                                <td colspan=" 6">
+                                    <a class='btn btn-warning float-right ml-2' style="border-radius: 24px;"
+                                        onclick='bufferhref()'>Proceed to
+                                        checkout</a>
+                                    <a class='btn btn-primary float-right' style="border-radius: 24px;"
+                                        onclick='backhref()'>Continue shopping</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        {% endif %}
+                    </table> -->
+                </span>
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <ul>
+            <li class=" d-flex justify-content-end" style="background-color:#F3F3F3">
+
+                <a class='btn btnSize float-right'
+                    style="font-family: 'Poppins', sans-serif; font-weight: 700; color:white; background-color:#0000AD;border-radius: 24px;"
+                    href='/'>Continue
+                    shopping</a>
+            </li>
+        </ul>
+        {% endfor %}
+
+    </div>
+</main>
+
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+    // isChanging = false;
+
+    $("input").on("change paste", function () {
+        var id = $(this).attr('id');
+        var val = document.getElementById(id).value;
+        var url = "update-cart";
+
+        if (val == null || val == "") {
+            val = 0;
+        }
+
+        // if (isChanging == true) {
+        //     alert("Saving the quantity changes... first")
+        // }
+        // isChanging = false;
+        document.location.href = url + "/" + id + "/" + val;
+    });
+    // $("input").on("keydown", function () {
+    //     isChanging = true;
+    // });
+    function bufferhref() {
+        var nam = $(this).attr('nam');
+        // isChanging = true
+        // // alert(isChanging)
+        // if (isChanging == false) {
+        //     alert("Saving changes first...");
+        // }
+        // setTimeout(function () { window.location.href = nam + "/checkout/", 500);
+
+
+        // document.write("Redirecting to the url in 3 seconds...");
+        // setTimeout(function () { window.location.href = "{ url 'core:checkout' }"; }, 3000);
+    }
+    function backhref() {
+
+        setTimeout(function () { window.location.href = "{% url 'core:companypicker' %}"; }, 500);
+    }
+
+    function itemShowingFunc(max, id, currColor) {
+        var val = document.getElementById(id);
+        var bval = document.getElementById('bb0');
+
+
+
+        if (id == 'pp0') {
+            for (var i = 1; i <= max; i++) {
+
+                var currButton = document.getElementById("pp" + i);
+                var currBColor = document.getElementById("bb" + i);
+                currButton.style.display = 'block';
+                currBColor.style.backgroundColor = '#FFFFFF';
+
+            }
+            bval.style.borderColor = "#FFB600";
+            bval.style.backgroundColor = "#FFB600";
+            bval.style.color = "#FFFFFF";
+
+
+        } else {
+
+
+            for (var i = 1; i <= max; i++) {
+
+                var currButton = document.getElementById("pp" + i);
+                var currBColor = document.getElementById("bb" + i);
+
+                if (id == ("pp" + i)) {
+                    currButton.style.display = 'block';
+                    currBColor.style.backgroundColor = currColor;
+                } else {
+                    currButton.style.display = 'none';
+                    currBColor.style.backgroundColor = '#FFFFFF';
+                }
+            }
+            bval.style.borderColor = "#0000AD";
+            bval.style.backgroundColor = "#FFFFFF";
+            bval.style.color = "#0000AD";
+
+        }
+
+    }
+
+
+</script>
+{% endblock extra_scripts %}

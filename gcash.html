@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block extra_head %}
+{% load static %}
+<style>
+    .navbarHeight {
+        height: 130px !important;
+    }
+
+
+
+    .stripeBtn2 {
+        text-align: center;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+        text-decoration: none;
+
+        white-space: nowrap;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+        border-radius: 4px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.025em;
+        text-decoration: none;
+        -webkit-transition: all 150ms ease;
+        transition: all 150ms ease;
+        float: left;
+        width: 100%
+    }
+
+    button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+
+    }
+
+    a:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+
+    }
+
+    @media (max-width: 365px) {
+        .navbarHeight {
+            height: 130px !important;
+        }
+
+        .stripeBtn2 {
+            font-size: 12px;
+        }
+
+        .btFontSize {
+            font-size: small
+        }
+    }
+</style>
+{% endblock extra_head %}
+
+{% block content %}
+
+<nav class="navbar view overlay navbarHeight"
+    style="position: absolute; top:0; left:0; right:0;background-color: #000083;">
+    <div style="color:white;  position: absolute; bottom:0; left:0; right:0;text-align:center;width: 100%;
+    padding-right: 15px;padding-left: 15px;margin-right: auto;margin-left: auto;">
+        <h5>GCash Scan to Pay / Upload QR</h5>
+    </div>
+</nav>
+<div class="container wow fadeIn mb-5">
+
+
+    <div class="col-md-12 mb-4">
+
+        <ul class="list-group mb-3 z-depth-1 mt-5">
+
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Subtotal (PHP)</span>
+                <strong>₱{{ order.get_total|floatformat:2 }}</strong>
+            </li>
+
+
+            {% if rush_charge  is None  %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Service Charge</span>
+                <strong>({{ service|floatformat:2 }})</strong>
+            </li>
+            {% else %}
+
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Service Charge (Rush Order)</span>
+                <strong>({{ rush_charge|floatformat:2 }})</strong>
+            </li>
+            {% endif %}
+
+
+            {% if delivery_charge  is None  %}
+
+            {% else %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Delivery Charge</span>
+                <strong>({{ delivery_charge|floatformat:2 }})</strong>
+            </li>
+            {% endif %}
+
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Total (PHP)</span>
+                <strong>₱{{ total|floatformat:2 }}</strong>
+            </li>
+
+        </ul>
+
+    </div>
+    <div>
+        <h5>How to use</h5>
+        <p class="text-muted">Mobile: Download the QR Code or Take a screenshot with the QR Code. Then follow the
+            infographic
+            below.</p>
+        <p class="text-muted">Desktop: Scan the QR Code with your GCash mobile app by following the infographic
+            below.</p>
+        <div class="row  justify-content-around">
+            <div class="col-md-6">
+                <div class="card">
+                    {% if company == "Bistro"  %}
+                        <img class="card-img" src="{% static 'img/Roys_Bistro_Valencia_QR.png' %}" alt="GCASH QR CODE">
+                    {% else %}
+                        <img class="card-img" src="{% static 'img/QR_GCash_royplazastoreonline.jpg' %}" alt="GCASH QR CODE">
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <img class="card-img" src="{% static 'img/GCASH-INFO-GRAPHICS.png' %}" alt="GCASH QR CODE">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <hr>
+    <div style="float:right;">
+
+        <form method="post">
+            {% csrf_token %}
+
+            <button class="stripeBtn2 mt-2" type="submit"
+                style="padding:none;border-radius: 24px; min-width:70px;color: white !important;background-color: #0000AD !important;">Done</button>
+            <div id="card-errors" role="alert"></div>
+        </form>
+
+
+    </div>
+    <div style="float:left;">
+
+        {% if company == "Bistro"  %}
+            <a class='btn btn-info btn-md'
+            style="border-radius: 24px;  font-size: 12px; background-color: #0000AD !important;"
+            href="{% static 'img/Roys_Bistro_Valencia_QR.png' %}" download><i class="fa fa-download"></i> Download
+            QR</a>
+        {% else %}
+            <a class='btn btn-info btn-md'
+            style="border-radius: 24px;  font-size: 12px; background-color: #0000AD !important;"
+            href="{% static 'img/QR_GCash_royplazastoreonline.jpg' %}" download><i class="fa fa-download"></i> Download
+            QR</a>
+        {% endif %}
+        
+
+
+    </div>
+    <br>
+
+</div>
+</div>
+
+{% endblock content %}

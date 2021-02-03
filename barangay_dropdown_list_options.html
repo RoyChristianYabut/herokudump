@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for barangay in barangays %}
+<option value="{{ barangay.pk }}">{{ barangay.LGU_NAME }}</option>
+{% endfor %}

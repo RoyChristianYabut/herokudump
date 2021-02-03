@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<style>
+    td a {
+        display: block;
+
+    }
+</style>
+{% endblock extra_head %}
+
+
+{% block content %}
+
+<main>
+    <div class="container">
+
+        <div class="table-responsive text-nowrap" style="overflow-y: auto; max-height: 600px;">
+            <h2>Order History</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Status</th>
+                        <th scope="col">Company</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Order Reference No.</th>
+                        <!-- <th scope="col">Receipt (when available)</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order_item in page_obj %}
+                    <tr>
+                        <!-- <td><a
+                                href="{{ order_item.get_absolute_url }}">{{ forloop.counter0|add:page_obj.start_index }}</a>
+                        </td> -->
+
+                        {% if order_item.refund_granted %}
+                        <td><span class="badge badge-pill success-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Refund Granted</a></span></td>
+                        {% elif order_item.refund_requested %}
+                        <td><span class="badge badge-pill warning-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Refund Requested</a></span></td>
+                        {% elif order_item.received %}
+                        <td><span class="badge badge-pill success-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Received</a></span></td>
+                        {% elif order_item.cancelled %}
+                        <td><span class="badge badge-pill danger-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Cancelled</a></span></td>
+                        {% elif order_item.on_hold %}
+                        <td><span class="badge badge-pill danger-color"><a
+                                    href="{{ order_item.get_absolute_url }}">On-hold</a></span></td>
+                        {% elif order_item.being_delivered %}
+                        <td><span class="badge badge-pill primary-color"><a
+                                    href="{{ order_item.get_absolute_url }}">On-Delivery</a></span></td>
+                        {% elif order_item.pickup %}
+                        <td><span class="badge badge-pill primary-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Ready For Pick-up</a></span></td>
+                        {% elif "Bank" in order_item.payment_method and not order_item.paid and order_item.prepared and order_item.preparing and order_item.approved %}
+                        <td><span class="badge badge-pill" style="background-color:#0000AD"><a
+                                    href="{{ order_item.get_absolute_url }}" style="color:white">To Pay</a></span></td>
+                        {% elif "GCash" in order_item.payment_method and not order_item.paid and order_item.prepared and order_item.preparing and order_item.approved %}
+                        <td><span class="badge badge-pill" style="background-color:#0000AD"><a
+                                    href="{{ order_item.get_absolute_url }}" style="color:white">To Pay</a></span></td>
+                        {% elif order_item.prepared %}
+                        <td><span class="badge badge-pill primary-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Prepared</a></span></td>
+                        {% elif order_item.preparing %}
+                        <td><span class="badge badge-pill success-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Preparing</a></span></td>
+                        {% elif order_item.approved %}
+                        <td><span class="badge badge-pill success-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Approved</a></span></td>
+                        {% else %}
+                        <td><span class="badge badge-pill warning-color"><a
+                                    href="{{ order_item.get_absolute_url }}">Pending</a></span></td>
+                        {% endif %}
+                        <td><a href="{{ order_item.get_absolute_url }}">{{order_item.ordered_date}}</a></td>
+                        <td><a href="{{ order_item.get_absolute_url }}"
+                                style="color:#{{order_item.company.branding_color}}">{{order_item.company}}</a></td>
+                        <td><a href="{{ order_item.get_absolute_url }}">{{order_item.ref_code}}</a></td>
+                        {% comment %}
+                        {% if order_item.receipt %}
+                        <td><a href="{{order_item.receipt.url}}">View</a></td>
+                        {% else %}
+                        <td><a href="#!">unavailable</a></td>
+                        {% endif %}
+                        {% endcomment %}
+
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan='5'>You have no orders</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if order_item.coupon %}
+                    <tr>
+                        <td colspan="5"><b>Coupon</b>: {{order_item.coupon.code}}</td>
+                        <td><b>-₱{{ order_item.get_coupon_amount_history|floatformat:2 }}</b></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <nav class="d-flex justify-content-center wow fadeIn">
+            <ul class="pagination pg-blue">
+
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+    </div>
+</main>
+
+{% endblock content %}

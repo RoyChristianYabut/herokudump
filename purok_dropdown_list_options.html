@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for purok in puroks %}
+<option value="{{ purok.pk }}">{{ purok.LGU_NAME }}</option>
+{% endfor %}

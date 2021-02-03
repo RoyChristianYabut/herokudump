@@ -1,0 +1,266 @@
+{% extends "account/base.html" %}
+{% load account %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+<div class="container">
+    <section class="mb-4">
+        <div class="card">
+
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="row justify-content-center align-items-center">
+
+                        <div class="col-2 align-self-center align-items-center"
+                            style="width:47px; text-align: center; margin-left: 0px;margin-right: 0px;padding-left: 0px;padding-right: 0px;">
+
+                            <div class="d-block d-lg-none d-md-none d-sm-none" style="display: inline;">
+                                <div
+                                    style="height:100px;width:100px; transform: translate(-25px,0); margin-left: 0px;margin-right: 0px;">
+
+                                    <button type="button" class="update-img" style="background: none; color: inherit;   border: none;  padding: 0; font: inherit;
+                                        cursor: pointer;
+                                        outline: inherit; " data-id="{% url 'core:update_img' userprofile.pk %}">
+                                        <img src="{{ user.userprofile.image.url }}"
+                                            style="border:1px solid black; border-radius: 25%;height:100px; width:100px; object-fit: cover; ">
+                                    </button>
+
+                                </div>
+                            </div>
+
+                            <div class="d-md-block d-sm-block d-none "
+                                style="align-self: center;text-align: center; display: inline;">
+                                <div style="height:100px; width:100px;transform: translate(15px,0);">
+                                    <button type="button" class="update-img" style="background: none; color: inherit;   border: none;  padding: 0; font: inherit;
+                                        cursor: pointer;
+                                        outline: inherit; " data-id="{% url 'core:update_img' userprofile.pk %}">
+                                        <img src="{{ user.userprofile.image.url }}"
+                                            style="border:1px solid black; border-radius: 25%;height:100px; width:100px; object-fit: cover;">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <table style="width: 100%;">
+                                <tr>
+
+                                    <th colspan="5">
+                                        <div class="d-block d-lg-none d-md-none d-sm-none">
+                                            <div class="card-text">
+                                                <h3 style="font-weight: 500;  text-align: center;">{{ user.username }}
+                                                </h3>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-md-block d-sm-block d-none">
+                                            <div class="card-text">
+                                                <h3 style="font-weight: 500;">{{ user.username }}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="font-size: 10px; color:#E29C00">Profile Picture</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">You can customize your look! press the edit button to upload an
+                                        image.</td>
+                                    <td style="text-align: right;"><a href="#"><button type="button" class="update-img"
+                                                style="background: none; color: inherit; border: none;  padding: 0; font: inherit; 
+                                     cursor: pointer;outline: inherit; "
+                                                data-id="{% url 'core:update_img' userprofile.pk %}">Edit</button></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="margin-right: auto;">
+                                        <a class='btn btn-primary  btn-sm' style="border-radius: 24px; font-size: 8px; "
+                                            href="{% url 'core:order-history' %}">Order History</a>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td colspan="3" style="text-align: right;">
+                                        <a class='btn btn-danger btn-sm' style="border-radius: 24px;  font-size: 8px;"
+                                            href="{% url 'account_logout' %}">Logout</a>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-text" style="font-weight: 500">Contact Information</h4>
+                <p style="font-size: 10px; color:#E29C00; margin-bottom: 7px;">Email</p>
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-9" style="min-width: 310px; max-height: 20px; margin-bottom: 3px;">
+                        <p">{{ user.email }}</p>
+                    </div>
+                    <div class="col-3" style="font-size: 10px;min-width:170px; width: inherit; text-align: right;">
+                        {% if user.email == "" %}
+                        <button type="button" class="update-email buttonLink" style="font-size: 10px; "
+                            data-id="{% url 'core:update_email' user.pk %}">
+                            <a href="#">Add</a>
+                        </button>
+                        {% else %}
+                        <a href="#" style="margin-right: 10px;">Verify</a>
+                        <button type="button" class="update-email buttonLink" style="font-size: 10px; "
+                            data-id="{% url 'core:update_email' user.pk %}">
+                            <a href="#">Edit</a>
+                        </button>
+                        <button type="button" class="delete-email buttonLink"
+                            style="font-size: 10px; margin-left: 10px;" data-id="{% url 'core:delete_email' user.pk %}">
+                            <a href="#">Remove</a>
+                        </button>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+                <p style="font-size: 10px; color:#E29C00; margin-bottom: 7px;">Mobile Number</p>
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-9" style="min-width: 310px; max-height: 20px; margin-bottom: 3px;">
+                        <p">{{userprofile.phone_number}}</p>
+                    </div>
+                    <div class="col-3" style="font-size: 10px; min-width:140px;width: inherit; text-align: right;">
+                        {% if userprofile.phone_number == "" %}
+                        <button type="button" class="update-phone buttonLink" style=" font-size: 10px; "
+                            data-id="{% url 'core:update_phone' userprofile.pk %}">
+                            Add
+                        </button>
+                        {% else %}
+                        <button type="button" class="update-phone buttonLink"
+                            style="margin-right: 10px; margin-left: 10px; font-size: 10px; "
+                            data-id="{% url 'core:update_phone' userprofile.pk %}">
+                            Edit
+                        </button>
+                        <button type="button" class="delete-phone buttonLink" style=" font-size: 10px; "
+                            data-id="{% url 'core:delete_phone' userprofile.pk %}">
+                            Remove
+                        </button>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-text" style="font-weight: 500">Shipping Address</h4>
+                <div>
+                    <div class="row" style="padding: 0px; width: 100%; height:100%;margin: 0px;;">
+
+                        <div class="col-10" style="min-width: 280px;">
+                            {% if address %}
+                            <div class="row" style="font-size: 12px; max-height:2rem;width:100%; margin-right: 0px;">
+                                <p>{{ address.street_address }}, {{ address.apartment_address }}
+                                </p>
+                            </div>
+                            <div class="row" style="font-size: 10px">
+                                <p>{{ address.country.name }}, {{ address.zip}}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-2"
+                            style="font-size: 10px;min-width:140px; width: inherit; text-align: right; padding-right: 0px;">
+                            {% if address %}
+                            <button type="button" class="update-shipping buttonLink"
+                                data-id="{% url 'core:update_shipping' address.pk %}">Edit</button>
+                            <button type="button" class="delete-shipping buttonLink" style="margin-left: 10px;"
+                                data-id="{% url 'core:delete_shipping' address.pk %}">Remove</button>
+
+                            {% else %}
+                            <button type="button" class="add-shipping buttonLink">Add</button>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-text" style="font-weight: 500">Billing Address</h4>
+                <div>
+                    <div class="row" style="padding: 0px; width: 100%; height:100%;margin: 0px;;">
+                        <div class="col-10" style="min-width: 280px;">
+                            {% if b_address %}
+                            <div class="row" style="font-size: 12px; max-height:2rem;width:100%; margin-right: 0px;">
+                                <p>{{ b_address.street_address }}, {{ b_address.apartment_address }}
+                                </p>
+                            </div>
+                            <div class="row" style="font-size: 10px">
+                                <p>{{ b_address.country.name }}, {{ b_address.zip}}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-2"
+                            style="font-size: 10px;min-width:140px; width: inherit; text-align: right; padding-right: 0px;">
+                            {% if b_address %}
+                            <button type="button" class="update-billing buttonLink"
+                                data-id="{% url 'core:update_billing' b_address.pk  %}">Edit</button>
+                            <button type="button" class="delete-billing buttonLink" style="margin-left: 10px;"
+                                data-id="{% url 'core:delete_billing' b_address.pk  %}">Remove</button>
+
+                            {% else %}
+                            <button type="button" class="add-billing buttonLink">Add</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-text" style="font-weight: 500">Account Settings</h5>
+                    <a class='btn btn-sm'
+                        style="border-radius: 24px; font-size: 8px; color:white;background-color: #FFB600;"
+                        href="/accounts/password/reset/">Change Password</a>
+            </div>
+        </div>
+        <!-- <div class="card">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        {{ u_form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-info" , type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div> -->
+
+
+    </section>
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+<!-- 
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script> -->
+
+{% endblock extra_scripts %}

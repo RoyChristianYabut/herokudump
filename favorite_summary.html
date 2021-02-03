@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<main>
+    <div class="container">
+        <h2 style="color: #000083; font-weight: 600;">Favorites</h2>
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <!-- 
+            <button style="box-shadow: none; background-color:#F8F8F8;" type="button" class="btn btn-primary "
+                onclick="itemShowingFunc('1')" disabled>
+                <div data-toggle="tooltip" title="Coming Soon">Card
+                    View</div>
+            </button> -->
+            <!-- <button style="box-shadow: none; background-color:#F8F8F8;" type="button" class="btn btn-primary "
+                onclick="itemShowingFunc('2')">List
+                View</button> -->
+        </div>
+
+        <!-- CARD VIEW -->
+        <section id="cardview" class="text-center mb-4" style="display:none;">
+
+            <div class="row wow fadeIn">
+                {% for order_item in object.items.all %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-xs-12 mb-4">
+                    <div class="card d-flex align-items-stretch" style="height:360px">
+                        {% if order_item.item.quantity < 1 %}
+                        <div class="mx-auto  d-flex justify-content-center align-items-center"
+                            style="width: 200px; height: 196px; max-height: 196px; background-color: white; margin-top: 4px; ">
+                            <a href=" {{ order_item.item.get_absolute_url }}">
+                                <img src="{{ order_item.item.image.url }}" class="align-self-center " style="z-index:1; max-width:200px; 
+                      max-height:196px;">
+
+                        </div>
+                        <div class="card-body text-center" style="padding-bottom: 0;">
+                            <h5 style="font-size: medium;font-weight: 300;">
+                                <strong>
+                                    <a href="#!" class="dark-grey-text">{{ order_item.item.title }}
+                                        {% if order_item.item.label == 'P' %}
+                                        <span
+                                            class="badge badge-pill primary-color">{{ order_item.item.get_label_display }}</span>
+                                        {% elif order_item.item.label == 'S' %}
+                                        <span
+                                            class="badge badge-pill success-color">{{ order_item.item.get_label_display }}</span>
+                                        {% elif order_item.item.label == 'L' %}
+                                        <span
+                                            class="badge badge-pill warning-color">{{ order_item.item.get_label_display }}</span>
+                                        {% elif order_item.item.label == 'O' %}
+                                        <span
+                                            class="badge badge-pill danger-color">{{ order_item.item.get_label_display }}</span>
+                                        {%endif%}
+                                    </a>
+                                </strong>
+                            </h5>
+
+                            <h4 class="blue-text" style="font-size: medium;font-weight: 300;">
+                                <strong>₱
+                                    {% if order_item.item.discount_price %}
+                                    {{ order_item.item.discount_price|floatformat:2 }}
+                                    {% else %}
+                                    {{ order_item.item.price|floatformat:2  }}
+                                    {% endif %}
+                                </strong>
+                            </h4>
+                        </div>
+                        {% else %}
+                        <div class="mx-auto  d-flex justify-content-center align-items-center"
+                            style="width: 200px; height: 196px; max-height: 196px; background-color: white; margin-top: 4px; ">
+                            <a href=" {{ order_item.item.get_absolute_url }}">
+                                <img src="{{ order_item.item.image.url }}" class="align-self-center " style="z-index:1; max-width:200px; 
+                      max-height:196px;">
+
+                                <div class="view overlay"
+                                    style="width:50px;height:50px;position:absolute;right:0;top:0;z-index:40;">
+                                    <a href='#!' data-id="{% url 'core:add-to-cart-home' order_item.item.slug %}"
+                                        class="add_to_cart"><span class="fa-stack"><i
+                                                class="fa fa-square fa-stack-2x fa-xs fa-inverse"></i><i
+                                                class="fa fa-plus fa-stack-1x"></i></span></a>
+
+                                </div>
+                                <div class="mask rgba-white-slight"></div>
+                            </a>
+                        </div>
+                        <div class="card-body text-center" style="padding-bottom: 0;">
+                            <h5 style="font-size: medium;font-weight: 300;">
+                                <strong>
+                                    <a href="{{ order_item.item.get_absolute_url }}"
+                                        class="dark-grey-text">{{ order_item.item.title }}
+                                        {% if order_item.item.label == 'P' %}
+                                        <span
+                                            class="badge badge-pill primary-color">{{ order_item.item.get_label_display }}</span>
+                                        {% elif order_item.item.label == 'S' %}
+                                        <span
+                                            class="badge badge-pill success-color">{{ order_item.item.get_label_display }}</span>
+                                        {% elif order_item.item.label == 'L' %}
+                                        <span
+                                            class="badge badge-pill warning-color">{{ order_item.item.get_label_display }}</span>
+                                        {% elif order_item.item.label == 'O' %}
+                                        <span
+                                            class="badge badge-pill danger-color">{{ order_item.item.get_label_display }}</span>
+                                        {%endif%}
+                                    </a>
+                                </strong>
+                            </h5>
+
+                            <h4 class="blue-text" style="font-size: medium;font-weight: 300;">
+                                <strong>₱
+                                    {% if order_item.item.discount_price %}
+                                    {{ order_item.item.discount_price|floatformat:2 }}
+                                    {% else %}
+                                    {{ order_item.item.price|floatformat:2  }}
+                                    {% endif %}
+                                </strong>
+                            </h4>
+                        </div>
+                        {% endif %}
+
+
+
+                    </div>
+                </div>
+                {% empty%}
+                <div class="col-lg-4"></div>
+
+                <div class="col-lg-4" style="text-align: center; font-weight: 600;">NO FAVORITES FOUND</div>
+                {% endfor %}
+
+                <!-- empty placeholder -->
+
+                {% if page_obj|length < 4 %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-xs-12 mb-4" style="visibility:hidden">
+                    <div class="card d-flex align-items-stretch" style="height:1px">
+                        <div class="mx-auto  d-flex justify-content-center align-items-center"
+                            style="width: 200px; height: 196px; max-height: 196px; background-color: white; margin-top: 4px; ">
+                            <a href=" {{ order_item.item.get_absolute_url }}">
+                                <img src="{{ order_item.item.image.url }}" style="z-index:1; max-width:100%; 
+                      max-height:100%;">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if page_obj|length < 3 %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-xs-12 mb-4" style="visibility:hidden">
+                    <div class="card d-flex align-items-stretch" style="height:1px">
+                        <div class="mx-auto  d-flex justify-content-center align-items-center"
+                            style="width: 200px; height: 196px; max-height: 196px; background-color: white; margin-top: 4px; ">
+                            <a href=" {{ order_item.item.get_absolute_url }}">
+                                <img src="{{ order_item.item.image.url }}" style="z-index:1; max-width:100%; 
+                      max-height:100%;">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if page_obj|length < 2 %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-xs-12 mb-4" style="visibility:hidden">
+                    <div class="card d-flex align-items-stretch" style="height:1px">
+                        <div class="mx-auto  d-flex justify-content-center align-items-center"
+                            style="width: 200px; height: 196px; max-height: 196px; background-color: white; margin-top: 4px; ">
+                            <a href=" {{ order_item.item.get_absolute_url }}">
+                                <img src="{{ order_item.item.image.url }}" style="z-index:1; max-width:100%; 
+                      max-height:100%;">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </section>
+        <!-- END CARD VIEW -->
+
+        <!-- LIST VIEW -->
+        <div id="listview" style="display:block;">
+            <div class="table-responsive text-nowrap" style="overflow-y: auto; max-height: 400px;">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"></th>
+                            <th scope="col">Item title</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Subtotal</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for order_item in object.items.all %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td> <img src="{{ order_item.item.image.url }}" style="width:30px; height:30px;"></td>
+                            <td>{{ order_item.item.title}}</td>
+                            <td>₱{{ order_item.item.price|floatformat:2 }}</td>
+                            <td>
+                                <a href="{% url 'core:remove-single-item-from-favorites' order_item.item.slug %}"><i
+                                        class="fas fa-minus mr-2"></i></a>
+                                <input id="{{order_item.item.slug}}" type="number" value="{{ order_item.quantity }}"
+                                    min="0" max="100" class="inputquantity"
+                                    oninput="javascript: if (this.value.length > this.maxLength){ this.value = this.value.slice(0, this.maxLength);} if (this.value < 0) this.value = 0; "
+                                    maxlength="3" required />
+                                <a href="{% url 'core:add-favorite' order_item.item.slug %}"><i
+                                        class="fas fa-plus ml-2"></i></a>
+                            </td>
+                            <td>
+                                {% if order_item.item.discount_price %}
+                                ₱{{ order_item.get_total_discount_item_price|floatformat:2 }}
+                                <span class="badge badge-primary">Saving
+                                    ₱{{ order_item.get_amount_saved|floatformat:2 }}</span>
+                                {% else %}
+                                ₱{{ order_item.get_total_item_price|floatformat:2 }}
+                                {% endif %}
+
+
+                            </td>
+                            <td>
+
+                                <a href='#!' data-id="{% url 'core:remove-from-favorites' order_item.item.slug %}"
+                                    class="remove_from_favorites">
+                                    <img src="{% static 'img/svg/FAVORITE_SELECTED.svg' %}"
+                                        style="padding-bottom:5px; height:25px; width:25px;">
+                                </a>
+
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan='6'>Your favorites is empty</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% if object.coupon %}
+                        <tr>
+                            <td colspan="5"><b>Coupon</b></td>
+                            <td><b>-₱{{ object.get_coupon_amount|floatformat:2 }}</b></td>
+                        </tr>
+                        {% endif %}
+
+                    </tbody>
+                </table>
+
+            </div>
+            {% if object.items.all %}
+            <div class="table-responsive text-nowrap">
+                <span>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td colspan=" 7">
+                                    <a class='btn btn-primary float-right'
+                                        href="{% url 'core:update-cart-favorite' %}">Add to Cart</a>
+                                    <a class='btn btn-primary float-right'
+                                        href='{% url "core:companypicker" %}'>Continue
+                                        shopping</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </span>
+            </div>
+            {% endif %}
+        </div>
+        <!-- END LIST VIEW -->
+    </div>
+</main>
+
+{% endblock content %}
+{% block extra_scripts %}
+
+<script>
+    // isChanging = false;
+    $(".inputquantity").val(function (i, v) { //index, current value
+        return v.replace(/[\+\-\.]/gi, "");
+    });
+
+    $("input").on("change paste", function () {
+        var id = $(this).attr('id');
+        var val = document.getElementById(id).value;
+
+        var url = "update_favorite";
+
+        if (val == null || val == "") {
+            val = 0;
+        }
+        document.location.href = url + "/" + id + "/" + val;
+    });
+
+
+
+</script>
+<script>
+
+    function itemShowingFunc(slug, counter) {
+        var y = document.getElementsByClassName(slug);
+
+        for (var i = 0; i < y.length; i++) {
+
+            y[i].style.display = 'none';
+            if (i == counter) {
+
+                y[i].style.display = 'block';
+            }
+        }
+    }
+
+    var inputBox = document.getElementsByClassName("inputquantity");
+
+    for (var i = 0; i < inputBox.length; i++) {
+        var invalidChars = [
+            "-",
+            "+",
+            "."
+        ];
+        inputBox[i].addEventListener("input", function () {
+            this.value = this.value.replace(/[\+\-\.]/gi, "");
+        });
+
+        inputBox[i].addEventListener("keydown", function (e) {
+            if (invalidChars.includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+    }
+
+
+
+    function itemShowingFunc(num) {
+        var y = document.getElementById("cardview");
+        var x = document.getElementById("listview");
+        if (num == '1') {
+
+            y.style.display = 'block';
+            x.style.display = 'none';
+        }
+        if (num == '2') {
+
+            y.style.display = 'none';
+            x.style.display = 'block';
+        }
+    }
+
+
+
+</script>
+<script type="text/javascript">
+    $('.remove_from_favorites').on('click', function () {
+        product_id = $(this).attr('data-id')
+
+
+        $.ajax({
+            type: 'GET',
+            url: product_id,
+        })
+
+        setTimeout(function () { location.reload() }, 1000);
+    })
+</script>
+{% endblock extra_scripts %}

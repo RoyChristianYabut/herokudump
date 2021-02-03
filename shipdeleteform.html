@@ -1,0 +1,20 @@
+<form method="post" action="">
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h3 class="modal-title">Remove Shipping Address</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <p>Are you sure you want to remove your shipping address
+            <strong>{{ address.street_address }}, {{address.apartment_address}}</strong>?</p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </div>
+
+</form>

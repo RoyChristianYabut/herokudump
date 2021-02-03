@@ -1,0 +1,89 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+
+{% for q in queryset %}
+<br>
+<p>
+<h4>{{q.company.name}}</h4>
+Username: {{q.user}}<br>
+Full Name: <b>{{ q.user.firstname}} {{ q.user.lastname }}</b><br>
+Contact No: <b>{{ q.user.userprofile.phone_number }}</b><br>
+Email: {{ q.user.email }}<br>
+Reference Code: {{ q.ref_code }}<br>
+Payment Method: {{ q.payment_method}}<br>
+{% if q.payment_method == "Cash On Delivery" %}
+Address: {{ q.shipping_address.street_address }}<br>
+Notes(optional): {{ q.shipping_address.apartment_address }}
+{% endif %}
+<table>
+    Items: <br>
+    <tr>
+        <th>#</th>
+        <th>Stock #</th>
+        <th>Barcode</th>
+        <th colspan="2">Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+    </tr>
+    {% for i in q.items.all %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{ BAKEBITES_SUPERMARKETBB[i.item.slug] }}</td>
+        <td>{{ BAKEBITES_barcode[BAKEBITES_SUPERMARKETBB[i.item.slug]] }}</td>
+        <td colspan="2">{{ i.title }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.get_total_item_price_history|floatformat:2 }}</td>
+    </tr>
+    {% endfor %}
+    {% if q.coupon %}
+    <tr>
+        <td colspan="6">
+            Voucher: {{ q.coupon.code }}
+        </td>
+        <td>
+            -{{ q.get_coupon_amount_history|floatformat:2 }}
+        </td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td colspan="6">
+            Service Charge
+        </td>
+        <td style="text-align: right;">
+            {{ q.get_service|floatformat:2 }}
+        </td>
+    </tr>
+    {% if q.get_delivery != 0 %}
+    <tr>
+        <td colspan="6">
+            Delivery Charge
+        </td>
+        <td style="text-align: right;">
+            {{ q.get_delivery|floatformat:2 }}
+        </td>
+    </tr>
+    {% endif %}
+    {% if q.get_rush != 0 %}
+    <tr>
+        <td colspan="6">
+            Rush Charge
+        </td>
+        <td style="text-align: right;">
+            {{ q.get_rush|floatformat:2 }}
+        </td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td colspan="6">
+            Total Price:
+        </td>
+        <td style="text-align: right;">
+            {{ q.get_total_charge_history|floatformat:2 }}
+        </td>
+    </tr>
+</table>
+</p>
+<hr>
+{% endfor %}
+
+{% endblock %}

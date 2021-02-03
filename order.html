@@ -1,0 +1,572 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block extra_head %}
+<style>
+    .navbarHeight {
+        height: 130px !important;
+    }
+
+
+
+    #stripeBtnLabel {
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        font-size: 16px;
+        font-variant: normal;
+        padding: 0;
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+        font-weight: 500;
+        display: block;
+    }
+
+    #stripeBtn {
+        text-align: center;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+        text-decoration: none;
+        color: #fff;
+        background: #32325d;
+        white-space: nowrap;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+        border-radius: 4px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.025em;
+        text-decoration: none;
+        -webkit-transition: all 150ms ease;
+        transition: all 150ms ease;
+        float: left;
+        width: 100%
+    }
+
+    .stripeBtn2 {
+        text-align: center;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+        text-decoration: none;
+
+        white-space: nowrap;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+        border-radius: 4px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.025em;
+        text-decoration: none;
+        -webkit-transition: all 150ms ease;
+        transition: all 150ms ease;
+        float: left;
+        width: 100%
+    }
+
+    button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+
+    }
+
+    a:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+
+    }
+
+    @media (max-width: 365px) {
+        .navbarHeight {
+            height: 130px !important;
+        }
+
+        .stripeBtn2 {
+            font-size: 12px;
+        }
+
+        .sizeFont {
+            font-size: x-large;
+        }
+    }
+
+    .stripe-form {
+        padding: 5px 30px;
+    }
+
+    #card-errors {
+        height: 20px;
+        padding: 4px 0;
+        color: #fa755a;
+    }
+
+    .stripe-form-row {
+        width: 100%;
+        float: left;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+
+
+    /**
+ * The CSS shown here will not be introduced in the Quickstart guide, but shows
+ * how you can use CSS to style your Element's container.
+ */
+    .StripeElement {
+        box-sizing: border-box;
+
+        height: 40px;
+
+        padding: 10px 12px;
+
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background-color: white;
+
+        box-shadow: 0 1px 3px 0 #e6ebf1;
+        -webkit-transition: box-shadow 150ms ease;
+        transition: box-shadow 150ms ease;
+    }
+
+    .StripeElement--focus {
+        box-shadow: 0 1px 3px 0 #cfd7df;
+    }
+
+    .StripeElement--invalid {
+        border-color: #fa755a;
+    }
+
+    .StripeElement--webkit-autofill {
+        background-color: #fefde5 !important;
+    }
+
+    .current-card-form {
+        display: none;
+    }
+</style>
+{% endblock extra_head %}
+{% block content %}
+
+
+{% if "GCash" in object.payment_method and not object.received %}
+
+<main>
+
+    <nav class="navbar view overlay navbarHeight"
+        style="position: absolute; top:0; left:0; right:0;background-color: #000083;">
+        <div style="color:white;  position: absolute; bottom:0; left:0; right:0;text-align:center;">
+            <h3 class="sizeFont">Order: {{ object.ref_code }}</h3>
+        </div>
+    </nav>
+    <div class="container wow fadeIn">
+
+
+        <div class="row my-5 ">
+            <!-- From Order Snippet -->
+            <div class="col-md-12 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <span class="badge badge-secondary badge-pill">{{ order.items.count }}</span>
+                </h4>
+                <ul class="list-group mb-3 z-depth-1">
+                    <div style="overflow-y: auto; max-height: 400px;">
+                        {% for order_item in order.items.all %}
+                        <li class="list-group-item d-flex  lh-condensed" style="padding:8px 12px;">
+
+
+                            <div>
+                                <img src="{{ order_item.item.image.url }}"
+                                    style="width:60px; height:60px; padding-right:5px;">
+                            </div>
+                            <div>
+                                <h6 class="my-0">
+                                    {{ order_item.item.title}}
+                                </h6>
+
+                                <h6 class="text-muted my-0 py-0" style="font-size:smaller;">
+                                    ₱{{ order_item.price }}<br>Quantity:
+                                    {{ order_item.quantity }}
+                                </h6>
+                            </div>
+
+
+
+                            <!-- <small class="text-muted">{{ order_item.item.description}}</small> -->
+                            <span class="text-muted ml-auto">₱{{ order_item.get_final_price|floatformat:2 }}</span>
+                        </li>
+                        {% endfor %}
+                        {% if order.coupon %}
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <div class="text-success">
+                                <h6 class="my-0">Promo code</h6>
+                                <small>{{ order.coupon.code }}</small>
+                            </div>
+                            <span class="text-success">-₱{{ order.get_coupon_amount|floatformat:2 }}</span>
+                        </li>
+                        {% endif %}
+                    </div>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Subtotal (PHP)</span>
+                        <strong>₱{{ order.get_total|floatformat:2 }}</strong>
+                    </li>
+
+
+                    {% if rush_charge is None %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Service Charge</span>
+                        <strong>({{ service|floatformat:2 }})</strong>
+                    </li>
+                    {% else %}
+
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Service Charge (Rush Order)</span>
+                        <strong>({{ rush_charge|floatformat:2 }})</strong>
+                    </li>
+                    {% endif %}
+
+
+                    {% if delivery_charge is None %}
+
+                    {% else %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Delivery Charge</span>
+                        <strong>({{ delivery_charge|floatformat:2 }})</strong>
+                    </li>
+                    {% endif %}
+
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (PHP)</span>
+                        <strong>₱{{ total|floatformat:2 }}</strong>
+                    </li>
+
+                </ul>
+
+            </div>
+            <!--  -->
+
+            <div class="col-md-12">
+                <div class="row ">
+                    <div class="col-5">
+                        <a href="javascript:history.back()" class="stripeBtn2   btn-outline-primary"
+                            style="border-radius: 24px;font-weight:600; font-size:15px;color: #0000AD !important;border-color: #0000AD !important; margin:none; padding:none;">Back</a>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
+                    <div class="col-5">
+
+
+                        {% if order.received %}
+
+                        <div class="ttop" data-toggle="tooltip" data-placement="auto bottom"
+                            title="Thank you for paying!"><a class="stripeBtn2"
+                                style="margin:none; padding:none;border-radius: 24px;color: white !important;background-color:darkgray !important;">Send
+                                Payment</a></div>
+
+
+                        {% elif order.prepared %}
+                        <a href="{% url 'core:gcash' order.ref_code %}" class="stripeBtn2"
+                            style="margin:none; padding:none;border-radius: 24px;color: white !important;background-color: #0000AD !important;">Send
+                            Payment</a>
+                        {% else %}
+
+                        <div class="ttop" data-toggle="tooltip" data-placement="auto bottom"
+                            title="Please wait until our staff confirms your order item's availability and final prices (e.g. Wet Market orders). They'll get in touch with you soon!">
+                            <a class="stripeBtn2"
+                                style="margin:none; padding:none;border-radius: 24px;color: white !important;background-color:darkgray !important;">Send
+                                Payment</a>
+                        </div>
+                        {% endif%}
+
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <br>
+                        <span> <button type="button" class="order-options "
+                                style="font-size: 15px; margin-bottom: -5px; padding:none;border-radius: 24px;color: darkgray !important; background-color:#fafafa !important;border-color: darkgray !important;"
+                                data-id="{% url 'core:order_options' order.pk %}">
+                                <a href="#" style="color: darkgray;">Options</a>
+                            </button></span>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
+                    <div class="col-5">
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+    </div>
+</main>
+
+{% elif "Bank Transfer" in object.payment_method and not object.received %}
+<main>
+
+    <nav class="navbar view overlay navbarHeight"
+        style="position: absolute; top:0; left:0; right:0;background-color: #000083;">
+        <div style="color:white;  position: absolute; bottom:0; left:0; right:0;text-align:center;">
+            <h3 class="sizeFont">Order: {{ object.ref_code }}</h3>
+        </div>
+    </nav>
+    <div class="container wow fadeIn">
+
+
+        <div class="row my-5 ">
+            <!-- From Order Snippet -->
+            <div class="col-md-12 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <span class="badge badge-secondary badge-pill">{{ order.items.count }}</span>
+                </h4>
+                <ul class="list-group mb-3 z-depth-1">
+                    <div style="overflow-y: auto; max-height: 400px;">
+                        {% for order_item in order.items.all %}
+                        <li class="list-group-item d-flex  lh-condensed" style="padding:8px 12px;">
+
+
+                            <div>
+                                <img src="{{ order_item.item.image.url }}"
+                                    style="width:60px; height:60px; padding-right:5px;">
+                            </div>
+                            <div>
+                                <h6 class="my-0">
+                                    {{ order_item.item.title}}
+                                </h6>
+
+                                <h6 class="text-muted my-0 py-0" style="font-size:smaller;">
+                                    ₱{{ order_item.price }}<br>Quantity:
+                                    {{ order_item.quantity }}
+                                </h6>
+                            </div>
+
+
+
+                            <!-- <small class="text-muted">{{ order_item.item.description}}</small> -->
+                            <span class="text-muted ml-auto">₱{{ order_item.get_final_price|floatformat:2 }}</span>
+                        </li>
+                        {% endfor %}
+                        {% if order.coupon %}
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <div class="text-success">
+                                <h6 class="my-0">Promo code</h6>
+                                <small>{{ order.coupon.code }}</small>
+                            </div>
+                            <span class="text-success">-₱{{ order.get_coupon_amount|floatformat:2 }}</span>
+                        </li>
+                        {% endif %}
+                    </div>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Subtotal (PHP)</span>
+                        <strong>₱{{ order.get_total|floatformat:2 }}</strong>
+                    </li>
+
+
+                    {% if rush_charge is None %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Service Charge</span>
+                        <strong>({{ service|floatformat:2 }})</strong>
+                    </li>
+                    {% else %}
+
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Service Charge (Rush Order)</span>
+                        <strong>({{ rush_charge|floatformat:2 }})</strong>
+                    </li>
+                    {% endif %}
+
+
+                    {% if delivery_charge is None %}
+
+                    {% else %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Delivery Charge</span>
+                        <strong>({{ delivery_charge|floatformat:2 }})</strong>
+                    </li>
+                    {% endif %}
+
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (PHP)</span>
+                        <strong>₱{{ total|floatformat:2 }}</strong>
+                    </li>
+
+                </ul>
+
+            </div>
+            <!--  -->
+
+            <div class="col-md-12">
+                <div class="row ">
+                    <div class="col-5">
+                        <a href="javascript:history.back()" class="stripeBtn2   btn-outline-primary"
+                            style="border-radius: 24px;font-weight:600; font-size:15px;color: #0000AD !important;border-color: #0000AD !important; margin:none; padding:none;">Back</a>
+                    </div>
+                    <div class="col-2">
+                    </div>
+                    <div class="col-5">
+
+
+                        {% if order.received %}
+
+                        <div class="ttop" data-toggle="tooltip" data-placement="auto bottom"
+                            title="Thank you for paying!"><a class="stripeBtn2"
+                                style="margin:none; padding:none;border-radius: 24px;color: white !important;background-color:darkgray !important;">Send
+                                Payment</a></div>
+
+
+                        {% elif order.prepared %}
+                        <a href="{% url 'core:banktransfer' order.ref_code %}" class="stripeBtn2"
+                            style="margin:none; padding:none;border-radius: 24px;color: white !important;background-color: #0000AD !important;">Send
+                            Payment</a>
+                        {% else %}
+
+                        <div class="ttop" data-toggle="tooltip" data-placement="auto bottom"
+                            title="Please wait until our staff confirms your order item's availability and final prices (e.g. Wet Market orders). They'll get in touch with you soon!">
+                            <a class="stripeBtn2"
+                                style="margin:none; padding:none;border-radius: 24px;color: white !important;background-color:darkgray !important;">Send
+                                Payment</a>
+                        </div>
+                        {% endif%}
+
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <span> <button type="button" class="order-options "
+                                style="font-size: 15px; margin-bottom: -5px; padding:none;border-radius: 24px;color: darkgray !important; background-color:#fafafa !important;border-color: darkgray !important;"
+                                data-id="{% url 'core:order_options' order.pk %}">
+                                <a href="#" style="color: darkgray;">Options</a>
+                            </button></span>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
+                    <div class="col-5">
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+    </div>
+</main>
+{% else %}
+<main>
+
+    <div class="container">
+
+        <div class="table-responsive text-nowrap">
+            <h2>Order History</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Item title</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total Item Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order_item in object.items.all %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ order_item.title}}</td>
+                        <td>₱{{ order_item.price|floatformat:2 }}</td>
+                        <td>{{ order_item.quantity }}</td>
+                        <td>
+                            {% if order_item.discount_price %}
+                            ₱{{ order_item.get_total_discount_item_price_history|floatformat:2 }}
+                            <span class="badge badge-primary">Saving
+                                ₱{{ order_item.get_amount_saved|floatformat:2 }}</span>
+                            {% else %}
+                            ₱{{ order_item.get_total_item_price_history|floatformat:2 }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan='5'>Your cart is empty</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if order.coupon %}
+                    <tr>
+                        <td colspan="4"><b>Coupon: {{order.coupon.code}}</b></td>
+                        <td><b>-₱{{ order.get_coupon_amount_history|floatformat:2 }}</b></td>
+                    </tr>
+                    {% endif %}
+                    {% if object.get_total_history %}
+                    <tr>
+                        <td colspan="4"><b>Subtotal</b></td>
+                        <td><b>₱{{ object.get_total_history|floatformat:2 }}</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><b>Service Charge</b> ({{ remarks }})</td>
+                        <td><b>({{ service|floatformat:2 }})</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><b>Total</b></td>
+                        <td><b>₱{{ total|floatformat:2 }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            <!--  <span><a href="{% url 'core:order_options' order.pk %}"
+                                    class="order-options btn btn-outline-danger btn-sm">Options</a></span> -->
+
+                            <button type="button" class="order-options "
+                                style="font-size: 15px; margin-bottom: -5px; padding:none;border-radius: 24px;color: darkgray !important; background-color:#fafafa !important;border-color: darkgray !important;"
+                                data-id="{% url 'core:order_options' order.pk %}">
+                                <a href="#" style="color: darkgray;">Options</a>
+                            </button>
+                        </td>
+                        <td colspan="4">
+                            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</main>
+{% endif%}
+
+{% endblock content %}

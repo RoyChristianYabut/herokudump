@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block extra_head %}
+<style>
+  .a:link {
+    color: #000083;
+  }
+
+  /* visited link */
+  .a:visited {
+    color: #000083;
+  }
+
+  /* mouse over link */
+  .a:hover {
+    color: #000099;
+  }
+
+  /* selected link */
+  .a:active {
+    color: #000083;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<main class=" pt-4">
+  <div class="container dark-grey-text mt-5">
+
+    <!--Grid row-->
+    <div class="row wow fadeIn">
+
+      <!--Grid column-->
+      <div class="col-md-4 mb-4">
+
+        <img src="{{ object.image.url }}" class="img-fluid" style="max-height: 400px;">
+
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-md-6 mb-4">
+
+        <!--Content-->
+        <div class="p-4">
+
+          <h5><b><br>CATEGORY<br></b></h5>
+          <h6>
+            {% if object.category.parent.parent.parent %}
+            >> {{ object.category.parent.parent.parent }}
+            {% endif %}
+            {% if object.category.parent.parent %}
+            >> {{ object.category.parent.parent }}
+            {% endif %}
+            {% if object.category.parent %}
+            >> {{ object.category.parent }}
+            {% endif %}
+
+
+            <a href="{{ object.category.go_to_home_url }}" style="color:#0000AD; font-weight: bolder;">
+              >> {{ object.category }}
+            </a>
+
+
+          </h6>
+
+          <hr>
+
+          <div class="mb-3">
+            <a href="">
+              <span class="badge purple mr-1">{{ object.get_category_display }}</span>
+            </a>
+          </div>
+
+          <p class="lead">
+            {% if object.discount_price %}
+            <span class="mr-1">
+              <del>₱{{ object.discount_price|floatformat:2 }}</del>
+            </span>
+            <span>₱{{ object.price|floatformat:2 }}</span>
+            {% else %}
+            <span>₱{{ object.price|floatformat:2 }}</span>
+            {% endif %}
+          </p>
+
+          <p class="lead font-weight-bold">Description</p>
+
+          <p>{{ object.description }}</p>
+          <form class="d-flex justify-content-left">
+            <p>
+              <a href="#!" onclick="decreaseQuantity()"><i class="fas fa-minus ml-2"></i></a>
+
+              <input id="item" class="inputNumber" type="number" value=1 min="1" max='{{ object.quantity }}'
+                oninput="javascript: if (this.value.length > this.maxLength){ this.value = this.value.slice(0, this.maxLength);} if (this.value == 0) this.value = 1;"
+                maxlength="3" required />
+
+              <a href="#!" max="{{ object.quantity }}" onclick="addQuantity()"><i class="fas fa-plus ml-2"></i></a>
+            </p>
+
+            {% comment %}
+            <!-- Default input -->
+            <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
+            <button class="btn btn-primary btn-md my-0 p" type="submit">
+              Add to cart
+              <i class="fas fa-shopping-cart ml-1"></i>
+            </button>
+            {% endcomment %}
+          </form>
+          <a class="btn btn-primary btn-md my-0 p" onclick="bufferhref()">
+            Add to cart
+            <i class="fas fa-shopping-cart ml-1"></i>
+          </a>
+          <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p">
+            Remove from cart
+          </a>
+
+
+
+        </div>
+        <!--Content-->
+
+      </div>
+      <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+    <hr>
+
+
+
+  </div>
+</main>
+
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+  $('.inputNumber').on('change paste', function () {
+    var id = $(this).attr('id');
+    var val = document.getElementById(id).value;
+    var max = $(this).attr('max');
+    // var url = "update-cart";
+
+
+
+    // document.location.href = url + "/" + id + "/" + val;
+    // "{% url 'core:update-cart-product' object.slug 1 %}"
+    if (val < max) {
+      var str = "{% url 'core:update-cart-product' object.company object.slug 1 %}"
+      var newStr = str.substring(0, str.length - 2);
+      window.location.href = newStr.concat(val);
+    } else {
+      var str = "{% url 'core:update-cart-product' object.company object.slug 1 %}"
+      var newStr = str.substring(0, str.length - 2);
+      window.location.href = newStr.concat(val);
+    }
+
+  })
+
+  function bufferhref() {
+
+
+    var val = document.getElementById("item").value;
+    var str = "{% url 'core:update-cart-product' object.company object.slug 1 %}"
+    var newStr = str.substring(0, str.length - 2);
+    window.location.href = newStr.concat(val);
+  }
+  function addQuantity() {
+    var plus = Number(document.getElementById("item").value);
+    var max = Number(document.getElementById("item").max);
+    if (plus < max) {
+      document.getElementById("item").value = plus + 1;
+
+    }
+  }
+  function decreaseQuantity() {
+    var minus = Number(document.getElementById("item").value);
+    if (minus > 1) {
+      document.getElementById("item").value = minus - 1;
+    }
+  }
+
+</script>
+{% endblock extra_scripts %}
+
+<!-- // document.location.href = "{% url 'core:update-cart-product' object.slug val %}"; -->

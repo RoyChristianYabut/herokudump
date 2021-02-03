@@ -1,0 +1,1278 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block extra_head %}
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<style>
+  #stripeBtnLabel {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 16px;
+    font-variant: normal;
+    padding: 0;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 500;
+    display: block;
+  }
+
+  #stripeBtn {
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    text-decoration: none;
+    color: #fff;
+    background: #32325d;
+    white-space: nowrap;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-decoration: none;
+    -webkit-transition: all 150ms ease;
+    transition: all 150ms ease;
+    float: left;
+    width: 100%
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+    background-color: #43458b;
+  }
+
+
+  .stripe-form {
+    padding: 5px 30px;
+  }
+
+  .stripe-form-row {
+    width: 100%;
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  /* general styling shared between versions */
+  .icon::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* version 4's styling (using calendar-o) */
+  .clock::before {
+    font-family: FontAwesome;
+    content: "\f017";
+  }
+
+  /* version 5's styling (using updated regular style of calendar) */
+  .clock::before {
+    font-family: "Font Awesome 5 Free";
+    /* updated font-family */
+    font-weight: 400;
+    /* regular style/weight */
+    content: "\f017";
+  }
+</style>
+
+{{ form.media }}
+{% endblock extra_head %}
+
+
+{% block content %}
+
+<main>
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+    </div>
+  </div>
+  <div class="container wow fadeIn">
+    <div class="alert-success " style="text-align: center; z-index:3;  width:100%;position: relative;
+          padding: 0.75rem 1.25rem;
+          margin-bottom: 1rem;
+          border: 1px solid transparent;
+          border-radius: 0.25rem; ">
+      Scheduled Orders are now available!<br>
+
+
+    </div>
+    <h2 class="my-5 h2 text-center">Checkout form</h2>
+    <div class="row">
+      <div class="col-md-8 mb-4">
+
+        <div class="col-md-12 mb-4">
+          <h3>Voucher</h3>
+          <!-- {% comment %}<button type="button" class="update-coupon buttonLink" style="font-size: 15px; "
+                data-id="{% url 'core:coupon_add_modal' order.pk %}">
+                <a href="#">ADD COUPON</a>
+              </button>
+            <button type="button" class="remove-coupon buttonLink" style="font-size: 15px; "
+              data-id="{% url 'core:coupon_remove_modal' order.pk %}">
+              <a href="#">REMOVE COUPON</a>
+            </button>{% endcomment %} -->
+          {% if DISPLAY_COUPON_FORM %}
+          <form class="card p-2" action="{% url 'core:add-coupon' company %}" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+              {{ couponform.code }}
+              <div class="input-group-append">
+                <button class="btn btn-secondary btn-md waves-effect m-0" type="submit">Redeem</button>
+              </div>
+            </div>
+          </form>
+          {% else %}
+          <div class="card">
+            <div class="card-body" style="padding-right: 20px; padding: 20px; padding-top: 10px; padding-bottom: 10px;">
+              <div class="row justify-content-between">
+                <div class="col-xs-8">
+                  {{ order.coupon.code }}
+
+                </div>
+                <div class="col-xs-4" style="text-align: right; align-content: flex-end;">
+                  <button type="button" class="remove-coupon " style="font-size: 15px; background-color: red;"
+                    data-id="{% url 'core:coupon_remove_modal' order.pk %}">
+                    <a href="#" style="color: white;">Remove Coupon</a>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <!-- <div class="stripe-form-row"><a id="stripeBtn" style="border-radius: 24px; background-color: #4693ec;"
+              href="{% url 'core:order-summary' %}">Update Order</a>
+          </div> -->
+          {% endif %}
+
+        </div>
+
+        <div class="card">
+          <form method="POST" class="card-body" id="checkoutForm"
+            data-provinces-url="{% url 'core:ajax_load_provinces' %}"
+            data-cities-url="{% url 'core:ajax_load_cities' %}"
+            data-municipalitys-url="{% url 'core:ajax_load_municipalitys' %}"
+            data-barangays-url="{% url 'core:ajax_load_barangays' %}"
+            data-puroks-url="{% url 'core:ajax_load_puroks' %}">
+            {% csrf_token %}
+
+            <h3>Payment option</h3>
+
+            <!-- <div class="d-block my-3">
+              {% for value, name in form.fields.payment_option.choices %}
+              <div class="custom-control custom-radio">
+                <input id="{{ name }}" name="payment_option" value="{{ value }}" type="radio"
+                  class="custom-control-input" required>
+                <label class="custom-control-label" for="{{ name }}">{{ name }}</label>
+              </div>
+              {% endfor %}
+            </div> -->
+            <div class="d-block my-3">
+
+              <div class="custom-control custom-radio">
+                <input id="Cash" name="payment_option" value="C" type="radio" class="custom-control-input" required>
+                <label class="custom-control-label" for="Cash">Cash</label>
+              </div>
+
+              <div class="custom-control custom-radio">
+                <input id="GCash" name="payment_option" value="G" type="radio" class="custom-control-input" required>
+                <label class="custom-control-label" for="GCash">GCash</label>
+              </div>
+
+              <div class="custom-control custom-radio">
+                <input id="Bank Transfer" name="payment_option" value="B" type="radio" class="custom-control-input"
+                  required>
+                <label class="custom-control-label" for="Bank Transfer">Bank Transfer</label>
+              </div>
+
+            </div>
+            <hr>
+            <h3>Delivery option</h3>
+
+            <div class="d-block my-3">
+              <!-- BISTRO ADDED -->
+              {% if company == "Bistro"%}
+              {% for value, name in form.fields.delivery_option.choices %}
+              {% if value == 'D' %}
+              <div class="custom-control custom-radio">
+                <input id="{{ name }}" name="delivery_option" value="{{ value }}" type="radio"
+                  class="custom-control-input" required>
+                <label class="custom-control-label" for="{{ name }}">Delivery (Free Delivery!)</label>
+              </div>
+              {% elif value == 'M' %}
+              <div class="custom-control custom-radio" style="display:none">
+                <input id="{{ name }}" name="delivery_option" value="{{ value }}" type="radio"
+                  class="custom-control-input" required>
+                <label class="custom-control-label" for="{{ name }}">Pick Up in Malaybalay <h6 class="text-muted">
+                    (<del>₱50</del>
+                    <span style='color: #FF0000;'>FREE!</span>
+                    promo until Dec
+                    14)
+                  </h6>
+                </label>
+              </div>
+              {% else %}
+              <div class="custom-control custom-radio">
+                <input id="{{ name }}" name="delivery_option" value="{{ value }}" type="radio"
+                  class="custom-control-input" required>
+                <label class="custom-control-label" for="{{ name }}">{{ name }}</label>
+              </div>
+              {% endif %}
+              {% endfor %}
+              {% else %}
+              {% for value, name in form.fields.delivery_option.choices %}
+              {% if value == 'M' %}
+              <div class="custom-control custom-radio">
+                <input id="{{ name }}" name="delivery_option" value="{{ value }}" type="radio"
+                  class="custom-control-input" required>
+                <label class="custom-control-label" for="{{ name }}">Pick Up in Malaybalay <h6 class="text-muted">
+                    (<del>₱50</del>
+                    <span style='color: #FF0000;'>FREE!</span>
+                    promo until Dec
+                    14)
+                  </h6>
+                </label>
+              </div>
+              <div class="hideable_malaybalay_helper" style="display:none;">
+                <img src=" {% static 'img/malaybalaytable.png' %}"><br>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2792.6762881380982!2d125.12436907887827!3d8.158277426442952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xbcc927394ec70184!2sBakebites%20Bakeshop!5e0!3m2!1sen!2sph!4v1605300780325!5m2!1sen!2sph"
+                  width="300" height="225" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
+                  tabindex="0"></iframe>
+              </div>
+
+              {% else %}
+              <div class="custom-control custom-radio">
+                <input id="{{ name }}" name="delivery_option" value="{{ value }}" type="radio"
+                  class="custom-control-input" required>
+                <label class="custom-control-label" for="{{ name }}">{{ name }}</label>
+              </div>
+              {% endif %}
+              {% endfor %}
+              {%endif%}
+              <!-- BISTRO END -->
+            </div>
+
+            <!--  -->
+            <div class="hideable_malaybalay_form">
+              <!--  -->
+              <hr>
+              <h3>Order option</h3>
+              <!-- BISTRO CUSTOM SCHED -->
+              {% if company == "Bistro" %}
+              <div class="d-block my-3">
+                <div class="custom-control custom-radio">
+                  <input id="Standard (Within 24 hours)" name="order_option" value="S" type="radio"
+                    class="custom-control-input" required>
+                  <label class="custom-control-label" for="Standard (Within 24 hours)">Standard <h6 class="text-muted">
+                      (ASAP)</h6></label>
+                </div>
+                <!--  -->
+                <div class="custom-control custom-radio" data-toggle="tooltip" title="try again on 8am - 3pm"
+                  style="display: none;">
+                  <input id="rushorderalt" name="order_option" value="R" type="radio" class="custom-control-input"
+                    required disabled>
+                  <label class="custom-control-label"
+                    for="Rush Order (2-3 hours, double service charge. Only available from 8am to 3pm)">Rush Order (2-3
+                    hours, double service charge. Only available from 8am to 3pm)</label>
+                </div>
+                <!--  -->
+                <div class="custom-control custom-radio">
+                  <input id="Scheduled (Order in advance and choose when you want it ready within 2-7 days) *New"
+                    name="order_option" value="SC" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label"
+                    for="Scheduled (Order in advance and choose when you want it ready within 2-7 days) *New">Scheduled
+                    <h6 class="text-muted">(Choose when you want it ready within the day 1 hour from the time right now,
+                      until 5pm tomorrow)</h6>
+                  </label>
+                </div>
+
+              </div>
+
+              <div class='hideable_schedule_form'>
+                {{ form.bistro_date }}
+
+              </div>
+              {% else %}
+              {% if company == 'Bakebites'%}
+              <div class="d-block my-3">
+                <div class="custom-control custom-radio">
+                  <input id="Standard (Within 24 hours)" name="order_option" value="S" type="radio"
+                    class="custom-control-input" required>
+                  <label class="custom-control-label" for="Standard (Within 24 hours)">Standard <h6 class="text-muted">
+                      (Next Day Delivery)</h6></label>
+                </div>
+                {% else %}
+                <div class="d-block my-3">
+                  <div class="custom-control custom-radio">
+                    <input id="Standard (Within 24 hours)" name="order_option" value="S" type="radio"
+                      class="custom-control-input" required>
+                    <label class="custom-control-label" for="Standard (Within 24 hours)">Standard <h6
+                        class="text-muted">
+                        (Within 24 hours)</h6></label>
+                  </div>
+                  {% endif %}
+                  {% if rush_hour %}
+                  <div class="custom-control custom-radio">
+                    <input id="Rush Order (2-3 hours, double service charge. Only available from 8am to 3pm)"
+                      name="order_option" value="R" type="radio" class="custom-control-input" required>
+                    <label class="custom-control-label"
+                      for="Rush Order (2-3 hours, double service charge. Only available from 8am to 3pm)">Rush Order <h6
+                        class="text-muted">(2-3
+                        hours, double service charge. Only available from 8am to 3pm)</h6></label>
+                  </div>
+                  {% else %}
+                  <div class="custom-control custom-radio" data-toggle="tooltip" title="try again on 8am - 3pm">
+                    <input id="rushorderalt" name="order_option" value="R" type="radio" class="custom-control-input"
+                      required disabled>
+                    <label class="custom-control-label"
+                      for="Rush Order (2-3 hours, double service charge. Only available from 8am to 3pm)">Rush Order
+                      (2-3
+                      hours, double service charge. Only available from 8am to 3pm)</label>
+                  </div>
+                  {% endif %}
+                  <div class="custom-control custom-radio">
+                    <input id="Scheduled (Order in advance and choose when you want it ready within 2-7 days) *New"
+                      name="order_option" value="SC" type="radio" class="custom-control-input" required>
+                    <label class="custom-control-label"
+                      for="Scheduled (Order in advance and choose when you want it ready within 2-7 days) *New">Scheduled
+                      <h6 class="text-muted">(Choose when you want it ready within 2-7 days between 8am to 5pm)</h6>
+                    </label>
+                  </div>
+
+                </div>
+                <!--  -->
+
+
+
+                <div class='hideable_schedule_form' style="display:none">
+                  <!-- <div class="input-group date" id="datetimepicker1" data-target-input="nearest"> -->
+                  {{ form.date }}
+                  <!-- <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                  <div class="input-group-text"><i class="fas fa-calendar"></i></div>
+                </div> -->
+                  <!-- </div> -->
+                </div>
+                {% endif %}
+
+
+                <!-- BISTRO CUSTOM SCHED -->
+
+                <!--  -->
+                <div class='hideable_delivery_form'>
+                  <div class='hideable_shipping_form'>
+                    <!--  -->
+                    <hr>
+                    <h3>Shipping address</h3>
+                    <h6 style="color:gray">*All locations in Valencia are now open for deliveries except for Tugaya,
+                      Guinoyuran, Lourdes, Mount Nebo.<br>
+                      Musuan & Dologon are also open for Delivery!</h6>
+
+                    <!--  -->
+                  </div>
+                  {% if default_shipping_address %}
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="use_default_shipping"
+                      id="use_default_shipping">
+                    <label class="custom-control-label" for="use_default_shipping">Use default shipping address:
+                      {{ default_shipping_address.street_address|truncatechars:10 }}</label>
+                  </div>
+                  {% endif %}
+                  <div class='hideable_shipping_form'>
+                    <!--  -->
+                    <div id="div_id_region" class="form-group">
+                      <label for="id_region" class="col-form-label  requiredField">
+                        Region<span class="asteriskField">*</span> </label>
+                      <select name="region" class="select form-control" id="id_region" required>
+                        <option value="39793" disabled>BARMM</option>
+                        <option value="38532" disabled>CAR</option>
+                        <option value="36787" disabled>NCR</option>
+                        <option value="1" disabled>REGION I</option>
+                        <option value="3398" disabled>REGION II</option>
+                        <option value="5808" disabled>REGION III</option>
+                        <option value="9048" disabled>REGION IV-A</option>
+                        <option value="13215" disabled>REGION IV-B</option>
+                        <option value="30217" disabled>REGION IX</option>
+                        <option value="14754" disabled>REGION V</option>
+                        <option value="18346" disabled>REGION VI</option>
+                        <option value="22537" disabled>REGION VII</option>
+                        <option value="25677" disabled>REGION VIII</option>
+                        <option value="32198" selected>REGION X</option>
+                        <option value="34319" disabled>REGION XI</option>
+                        <option value="35536" disabled>REGION XII</option>
+                        <option value="42407" disabled>REGION XIII</option>
+                      </select>
+                    </div>
+
+
+                    <div id="div_id_province" class="form-group">
+                      <label for="id_province" class="col-form-label  requiredField">
+                        Province:<span class="asteriskField">*</span>
+                      </label>
+                      <select name="province" class="select form-control" id="id_province" required="">
+                        <option value="" disabled>---------</option>
+
+                        <option value="32199" selected>BUKIDNON</option>
+
+                        <option value="32686" disabled>CAMIGUIN</option>
+
+                        <option value="32750" disabled>LANAO DEL NORTE</option>
+
+                        <option value="33280" disabled>MISAMIS OCCIDENTAL</option>
+
+                        <option value="33788" disabled>MISAMIS ORIENTAL</option>
+                      </select>
+                    </div>
+
+                    <div id="div_id_city" class="form-group">
+                      <label for="id_city" class="col-form-label  requiredField">
+                        City / Municipality<span class="asteriskField">*</span>
+                      </label>
+                      <select name="city" class="select form-control" id="id_city" required="">
+                        <option value="" disabled>---------</option>
+
+                        <option value="32200" disabled>BAUNGON</option>
+
+                        <option value="32670" disabled>CABANGLASAN</option>
+
+                        <option value="32417" disabled>City of Malaybalay</option>
+
+                        <option value="32638" selected>City of Valencia</option>
+
+                        <option value="32217" disabled>DAMULOG</option>
+
+                        <option value="32235" disabled>DANGCAGAN</option>
+
+                        <option value="32250" disabled>DON CARLOS</option>
+
+                        <option value="32280" disabled>IMPASUG-ONG</option>
+
+                        <option value="32294" disabled>KADINGILAN</option>
+
+                        <option value="32312" disabled>KALILANGAN</option>
+
+                        <option value="32327" disabled>KIBAWE</option>
+
+                        <option value="32351" disabled>KITAOTAO</option>
+
+                        <option value="32387" disabled>LANTAPAN</option>
+
+                        <option value="32402" disabled>LIBONA</option>
+
+                        <option value="32464" disabled>MALITBOG</option>
+
+                        <option value="32476" disabled>MANOLO FORTICH</option>
+
+                        <option value="32499" disabled>MARAMAG</option>
+
+                        <option value="32520" disabled>PANGANTUCAN</option>
+
+                        <option value="32540" disabled>QUEZON</option>
+
+                        <option value="32572" disabled>SAN FERNANDO</option>
+
+                        <option value="32597" disabled>SUMILAO</option>
+
+                        <option value="32608" disabled>TALAKAG</option>
+                      </select>
+                    </div>
+
+
+
+                    <div id="div_id_barangay" class="form-group">
+                      <label for="id_barangay" class="col-form-label  requiredField">
+                        Barangay:<span class="asteriskField">*</span>
+                      </label>
+                      <select name="barangay" class="select form-control" id="id_barangay" required="">
+                        <option value="" disabled>---------</option>
+
+                        <option value="32639">Bagontaas</option>
+
+                        <option value="32640">Banlag</option>
+
+                        <option value="32641">Barobo</option>
+
+                        <option value="32642">Batangan</option>
+
+                        <!-- <option value="32642">Batangan Inner</option> -->
+
+                        <option value="32643">Catumbalon</option>
+
+                        <option value="32644">Colonia</option>
+
+                        <option value="32645">Concepcion</option>
+
+                        <option value="32646">Dagat-Kidavao</option>
+
+                        <option value="99998">Dologon (MARAMAG)</option>
+
+                        <option value="32647" disabled>Guinoyuran (For Pick Up Only)</option>
+
+                        <option value="32648">Kahapunan</option>
+
+                        <option value="32649">Laligan</option>
+
+                        <option value="32650">Lilingayon</option>
+
+                        <option value="32651" disabled>Lourdes (For Pick Up Only)</option>
+
+                        <option value="32652">Lumbayao</option>
+
+                        <option value="32653">Lumbo</option>
+
+                        <option value="99997">Lumbo (Sugarland)</option>
+
+                        <option value="99996">Lumbo (Liloan)</option>
+
+                        <option value="99995">Lumbo (Paglaum 1 and 2)</option>
+
+                        <option value="32654">Lurogan</option>
+
+                        <option value="32655">Maapag</option>
+
+                        <option value="32656">Mabuhay</option>
+
+                        <option value="32657">Mailag</option>
+
+                        <option value="32658" disabled>Mt Nebo (For Pick Up Only)</option>
+
+                        <option value="99999">Musuan (MARAMAG)</option>
+
+                        <option value="32659" disabled>Nabago (For Pick Up Only)</option>
+
+                        <option value="32660">Pinatilan</option>
+
+                        <option value="32661" selected>Poblacion </option>
+
+                        <option value="32662">San Carlos</option>
+
+                        <option value="32663">San Isidro</option>
+
+                        <option value="32664">Sinabuagan</option>
+
+                        <option value="32665">Sinayawan</option>
+
+                        <option value="32666">Sugod</option>
+
+                        <option value="32667">Tongantongan</option>
+
+                        <option value="32668" disabled>Tugaya (For Pick Up Only) </option>
+
+                        <option value="32669">Vintar</option>
+
+                      </select>
+                    </div>
+
+                    <!-- <div id="div_id_barangay" class="form-group">
+                    <label for="id_barangay" class="col-form-label requiredField">
+                      Barangay:<span class="asteriskField">*</span>
+                    </label>
+                    <select name="barangay" class="select form-control" id="id_barangay" required="">
+                      <option value="">---------</option>
+                      {% for barangay in barangays %}
+                      <option value="{{ barangay.pk }}">{{ barangay.LGU_NAME }}</option>
+                      {% endfor %}
+                    </select>
+                  </div> -->
+
+
+
+                    <div id="div_id_purok" class="form-group">
+                      <label for="id_purok" class="col-form-label ">
+                        Purok:
+                      </label>
+                      <select name="purok" class="select form-control" id="id_purok">
+                        <option value="">---------</option>
+                        {% for purok in puroks %}
+                        <option value="{{ purok.pk }}">{{ purok.LGU_NAME }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+
+                    <div class="md-form mb-5">
+                      House No / Street Name
+                      <span class="asteriskField">*</span>
+                      </label>
+                      <div class="">
+                        <input type="text" name="street_name" maxlength="70" class="textinput textInput form-control"
+                          required id="id_street_name">
+                      </div>
+
+                    </div>
+
+                    <input type='hidden' placeholder='1234 Main St' id='shipping_address' name='shipping_address'
+                      class='form-control' />
+
+
+
+                    <div class="md-form mb-5">
+                      <input type='text' placeholder='Apartment or suite' id='shipping_address2'
+                        name='shipping_address2' class='form-control' />
+                      <label for="shipping_address2" class="">Notes / Landmarks (optional)</label>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-4 col-md-12 mb-4">
+                        <label for="country">Country</label>
+                        <select name="shipping_country" class="custom-select d-block w-100" id="id_shipping_country"
+                          onchange="var e=document.getElementById(&#39;flag_&#39; + this.id); if (e) e.src = &#39;/static/flags/{code}.gif&#39;.replace(&#39;{code}&#39;, this.value.toLowerCase() || &#39;__&#39;).replace(&#39;{code_upper}&#39;, this.value.toUpperCase() || &#39;__&#39;);">
+                          <option value="PH">Philippines</option>
+                        </select><img class="country-select-flag" id="flag_id_shipping_country"
+                          style="margin: 6px 4px 0" src="/static/flags/ph.gif">
+                        <div class="invalid-feedback">
+                          Please select a valid country.
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mb-4">
+                        <label for="shipping_zip">Zip</label>
+                        <input type='text' placeholder='Zip code' id='shipping_zip' name='shipping_zip'
+                          class='form-control' />
+                        <div class="invalid-feedback">
+                          Zip code required.
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="set_default_shipping"
+                        id="set_default_shipping">
+                      <label class="custom-control-label" for="set_default_shipping">Save as default shipping
+                        address</label>
+                    </div>
+
+                  </div>
+                  <!--  -->
+
+
+
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="same_billing_address"
+                      id="same_billing_address">
+                    <label class="custom-control-label" for="same_billing_address">Billing address is the same as my
+                      shipping address</label>
+                  </div>
+
+
+
+
+                  <div class='hideable_billing_form'>
+                    <hr>
+                    <h3>Billing address</h3>
+                    <!--  -->
+                    <div class='hideable_default_billing'>
+                      <!--  -->
+
+                      <div id="div_id_region1" class="form-group">
+                        <label for="id_region1" class="col-form-label  requiredField">
+                          Region<span class="asteriskField">*</span> </label>
+                        <select name="region1" class="select form-control" id="id_region1" required>
+                          <option value="39793">BARMM</option>
+                          <option value="38532">CAR</option>
+                          <option value="36787">NCR</option>
+                          <option value="1">REGION I</option>
+                          <option value="3398">REGION II</option>
+                          <option value="5808">REGION III</option>
+                          <option value="9048">REGION IV-A</option>
+                          <option value="13215">REGION IV-B</option>
+                          <option value="30217">REGION IX</option>
+                          <option value="14754">REGION V</option>
+                          <option value="18346">REGION VI</option>
+                          <option value="22537">REGION VII</option>
+                          <option value="25677">REGION VIII</option>
+                          <option value="32198" selected>REGION X</option>
+                          <option value="34319">REGION XI</option>
+                          <option value="35536">REGION XII</option>
+                          <option value="42407">REGION XIII</option>
+                        </select>
+                      </div>
+
+
+                      <div id="div_id_province1" class="form-group">
+                        <label for="id_province1" class="col-form-label  requiredField">
+                          Province:<span class="asteriskField">*</span>
+                        </label>
+                        <select name="province1" class="select form-control" id="id_province1" required="">
+                          <option value="">---------</option>
+
+                          <option value="32199" selected>BUKIDNON</option>
+
+                          <option value="32686">CAMIGUIN</option>
+
+                          <option value="32750">LANAO DEL NORTE</option>
+
+                          <option value="33280">MISAMIS OCCIDENTAL</option>
+
+                          <option value="33788">MISAMIS ORIENTAL</option>
+                        </select>
+                      </div>
+
+                      <div id="div_id_city1" class="form-group">
+                        <label for="id_city1" class="col-form-label  requiredField">
+                          City / Municipality<span class="asteriskField">*</span>
+                        </label>
+                        <select name="city1" class="select form-control" id="id_city1" required>
+                          <option value="" selected>---------</option>
+                        </select>
+                      </div>
+
+
+
+                      <div id="div_id_barangay1" class="form-group">
+                        <label for="id_barangay1" class="col-form-label  requiredField">
+                          Barangay:<span class="asteriskField">*</span>
+                        </label>
+                        <select name="barangay1" class="select form-control" id="id_barangay1" required>
+                          <option value="" selected>---------</option>
+                        </select>
+                      </div>
+
+                      <div id="div_id_purok1" class="form-group">
+                        <label for="id_purok1" class="col-form-label  requiredField">
+                          Purok:
+                        </label>
+                        <select name="purok1" class="select form-control" id="id_purok1">
+                          <option value="">---------</option>
+                          {% for purok in puroks %}
+                          <option value="{{ purok.pk }}">{{ purok.LGU_NAME }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+
+                      <div class="md-form mb-5">
+                        House No / Street Name
+                        <span class="asteriskField">*</span>
+                        </label>
+                        <div class="">
+                          <input type="text" name="street_name1" maxlength="70" class="textinput textInput form-control"
+                            required id="id_street_name1">
+                        </div>
+
+                      </div>
+
+
+                      <input type='hidden' placeholder='1234 Main St' id='billing_address' name='billing_address'
+                        class='form-control' />
+
+
+
+                      <!-- <div class="md-form mb-5">
+                      <input type='text' placeholder='Apartment or suite' id='billing_address2' name='billing_address2'
+                        class='form-control' />
+                      <label for="billing_address2" class="">Notes / Landmarks (optional)</label>
+                    </div> -->
+
+                      <div class="row">
+                        <div class="col-lg-4 col-md-12 mb-4">
+                          <label for="country">Country</label>
+                          <select name="billing_country" class="custom-select d-block w-100" id="id_billing_country"
+                            onchange="var e=document.getElementById(&#39;flag_&#39; + this.id); if (e) e.src = &#39;/static/flags/{code}.gif&#39;.replace(&#39;{code}&#39;, this.value.toLowerCase() || &#39;__&#39;).replace(&#39;{code_upper}&#39;, this.value.toUpperCase() || &#39;__&#39;);">
+                            <option value="PH">Philippines</option>
+                          </select><img class="country-select-flag" id="flag_id_billing_country"
+                            style="margin: 6px 4px 0" src="/static/flags/ph.gif">
+                          <div class="invalid-feedback">
+                            Please select a valid country.
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 mb-4">
+                          <label for="billing_zip">Zip</label>
+                          <input type='text' placeholder='Zip code' id='billing_zip' name='billing_zip'
+                            class='form-control' />
+                          <div class="invalid-feedback">
+                            Zip code required.
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" name="set_default_billing"
+                          id="set_default_billing">
+                        <label class="custom-control-label" for="set_default_billing">Save as default billing
+                          address</label>
+                      </div>
+                      <!--  -->
+                    </div>
+                    <!--  -->
+                    {% if default_billing_address %}
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="use_default_billing"
+                        id="use_default_billing">
+                      <label class="custom-control-label" for="use_default_billing">Use default billing address:
+                        {{ default_billing_address.street_address|truncatechars:10 }}</label>
+                    </div>
+                    {% endif %}
+
+                  </div>
+
+
+
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+              <hr class="mb-4">
+              <button id="submitButton" class="btn btn-primary btn-lg btn-block" style="border-radius: 24px;"
+                type="submit">Continue to
+                checkout</button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-4 mb-4">
+        {% include "order_snippet.html" %}
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+
+  var hideable_delivery_form = $('.hideable_delivery_form');
+  var hideable_shipping_form = $('.hideable_shipping_form');
+  var hideable_billing_form = $('.hideable_billing_form');
+  var hideable_default_billing = $('.hideable_default_billing');
+  var hideable_schedule_form = $('.hideable_schedule_form');
+  var hideable_malaybalay_form = $('.hideable_malaybalay_form');
+  var hideable_malaybalay_helper = $('.hideable_malaybalay_helper');
+
+
+  var use_default_shipping = document.querySelector("input[name=use_default_shipping]");
+  var use_default_billing = document.querySelector("input[name=use_default_billing]");
+  var same_billing_address = document.querySelector("input[name=same_billing_address]");
+  var use_delivery = document.querySelector("input[value=D]");
+  var use_pickup = document.querySelector("input[value=P]");
+  var use_standard = document.querySelector("input[value=S]");
+  var use_rush = document.querySelector("input[value=R]");
+  var use_schedule = document.querySelector("input[value=SC]");
+  var use_malaybalay = document.querySelector("input[value=M]");
+
+  use_delivery.addEventListener('change', function () {
+
+    if (this.checked) {
+      hideable_malaybalay_form.show();
+      hideable_malaybalay_helper.hide();
+      hideable_delivery_form.show();
+    }
+    else {
+      hideable_delivery_form.hide();
+    }
+  })
+
+  use_standard.addEventListener('change', function () {
+
+    if (this.checked) {
+      hideable_schedule_form.hide();
+
+    }
+
+  })
+  use_rush.addEventListener('change', function () {
+
+    if (this.checked) {
+      hideable_schedule_form.hide();
+
+    }
+
+  })
+  use_schedule.addEventListener('change', function () {
+
+    if (this.checked) {
+      hideable_schedule_form.show();
+    }
+    else {
+      hideable_schedule_form.hide();
+
+    }
+  })
+
+  use_pickup.addEventListener('change', function () {
+    if (this.checked) {
+      hideable_malaybalay_form.show();
+      hideable_malaybalay_helper.hide();
+      hideable_delivery_form.hide();
+      document.getElementById("id_region").required = false;
+      document.getElementById("id_province").required = false;
+      document.getElementById("id_city").required = false;
+      document.getElementById("id_barangay").required = false;
+      document.getElementById("id_purok").required = false;
+      document.getElementById("id_street_name").required = false;
+      document.getElementById("shipping_address").required = false;
+      document.getElementById("id_region1").required = false;
+      document.getElementById("id_province1").required = false;
+      document.getElementById("id_city1").required = false;
+      document.getElementById("id_barangay1").required = false;
+      document.getElementById("id_purok1").required = false;
+      document.getElementById("id_street_name1").required = false;
+      document.getElementById("billing_address").required = false;
+      $("#shipping_zip").val("8709");
+      $("#billing_zip").val("8709");
+      $("#shipping_address").val("Roy Plaza Bldg., L. Alkuino St., Poblacion, Valencia City");
+      $("#billing_address").val("Roy Plaza Bldg., L. Alkuino St., Poblacion, Valencia City");
+    }
+    else {
+      hideable_delivery_form.show();
+      document.getElementById("id_region").required = true;
+      document.getElementById("id_province").required = true;
+      document.getElementById("id_city").required = true;
+      document.getElementById("id_barangay").required = true;
+      document.getElementById("id_purok").required = true;
+      document.getElementById("id_street_name").required = true;
+      document.getElementById("shipping_address").required = true;
+      document.getElementById("id_region1").required = true;
+      document.getElementById("id_province1").required = true;
+      document.getElementById("id_city1").required = true;
+      document.getElementById("id_barangay1").required = true;
+      document.getElementById("id_street_name1").required = true;
+      document.getElementById("billing_address").required = true;
+
+
+    }
+
+  })
+
+
+  use_malaybalay.addEventListener('change', function () {
+    if (this.checked) {
+      hideable_malaybalay_form.hide();
+      hideable_malaybalay_helper.show();
+
+      document.getElementById("id_region").required = false;
+      document.getElementById("id_province").required = false;
+      document.getElementById("id_city").required = false;
+      document.getElementById("id_barangay").required = false;
+      document.getElementById("id_purok").required = false;
+      document.getElementById("id_street_name").required = false;
+      document.getElementById("shipping_address").required = false;
+      document.getElementById("id_region1").required = false;
+      document.getElementById("id_province1").required = false;
+      document.getElementById("id_city1").required = false;
+      document.getElementById("id_barangay1").required = false;
+      document.getElementById("id_purok1").required = false;
+      document.getElementById("id_street_name1").required = false;
+      document.getElementById("billing_address").required = false;
+      document.getElementById("Standard (Within 24 hours)").checked = true;
+
+      $("#shipping_zip").val("8700");
+      $("#billing_zip").val("8700");
+      $("#shipping_address").val("Bakebites, Sayre Highway, Malaybalay City");
+      $("#billing_address").val("Bakebites, Sayre Highway, Malaybalay City");
+    }
+    else {
+      hideable_malaybalay_form.show();
+      hideable_malaybalay_helper.hide();
+
+      document.getElementById("id_region").required = true;
+      document.getElementById("id_province").required = true;
+      document.getElementById("id_city").required = true;
+      document.getElementById("id_barangay").required = true;
+      document.getElementById("id_purok").required = true;
+      document.getElementById("id_street_name").required = true;
+      document.getElementById("shipping_address").required = true;
+      document.getElementById("id_region1").required = true;
+      document.getElementById("id_province1").required = true;
+      document.getElementById("id_city1").required = true;
+      document.getElementById("id_barangay1").required = true;
+      document.getElementById("id_street_name1").required = true;
+      document.getElementById("billing_address").required = true;
+
+
+    }
+
+  })
+
+
+  same_billing_address.addEventListener('change', function () {
+    if (this.checked) {
+      hideable_billing_form.hide();
+      document.getElementById("id_region1").required = false;
+      document.getElementById("id_province1").required = false;
+      document.getElementById("id_city1").required = false;
+      document.getElementById("id_barangay1").required = false;
+      document.getElementById("id_purok1").required = false;
+      document.getElementById("id_street_name1").required = false;
+      document.getElementById("billing_address").required = false;
+    } else {
+      hideable_billing_form.show();
+      document.getElementById("id_region1").required = true;
+      document.getElementById("id_province1").required = true;
+      document.getElementById("id_city1").required = true;
+      document.getElementById("id_barangay1").required = true;
+      document.getElementById("id_street_name1").required = true;
+      document.getElementById("billing_address").required = true;
+    }
+  })
+
+
+
+
+  if (use_default_shipping) {
+    use_default_shipping.addEventListener('change', function () {
+      if (this.checked) {
+        hideable_shipping_form.hide();
+        document.getElementById("id_region").required = false;
+        document.getElementById("id_province").required = false;
+        document.getElementById("id_city").required = false;
+        document.getElementById("id_barangay").required = false;
+        document.getElementById("id_purok").required = false;
+        document.getElementById("id_street_name").required = false;
+        document.getElementById("shipping_address").required = false;
+      } else {
+        hideable_shipping_form.show();
+        document.getElementById("id_region").required = true;
+        document.getElementById("id_province").required = true;
+        document.getElementById("id_city").required = true;
+        document.getElementById("id_barangay").required = true;
+        document.getElementById("id_purok").required = true;
+        document.getElementById("id_street_name").required = true;
+        document.getElementById("shipping_address").required = true;
+      }
+    })
+  }
+  if (use_default_billing) {
+    use_default_billing.addEventListener('change', function () {
+      if (this.checked) {
+        hideable_default_billing.hide();
+      } else {
+        hideable_default_billing.show();
+      }
+    })
+  }
+
+
+  $(document).ready(function () {
+
+    // $("#datetimepicker1").datetimepicker({
+    //   sideBySide: true,
+    //   disabledTimeIntervals: [[moment({ h: 0 }), moment({ h: 8 })], [moment({ h: 17 }), moment({ h: 24 })]],
+    //   format: 'DD/MM HH:mm',
+    // });
+    // $("#id_region").on('change', function () {
+    //   var url = $("#checkoutForm").attr("data-provinces-url");  // get the url of the `load_cities` view
+    //   var regionId = $(this).val();  // get the selected country ID from the HTML input
+
+    //   $.ajax({                       // initialize an AJAX request
+    //     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+    //     data: {
+    //       'region': regionId       // add the country id to the GET parameters
+    //     },
+    //     success: function (data) {   // `data` is the return of the `load_cities` view function
+    //       $("#id_province").html(data);  // replace the contents of the city input with the data that came from the server
+    //     }
+    //   });
+
+    // });
+
+    // $("#id_province").on("change", function () {
+    //   var url = $("#checkoutForm").attr("data-cities-url");  // get the url of the `load_cities` view
+    //   var provinceId = $(this).val();  // get the selected country ID from the HTML input
+
+    //   $.ajax({                       // initialize an AJAX request
+    //     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+    //     data: {
+    //       'province': provinceId       // add the country id to the GET parameters
+    //     },
+    //     success: function (data) {   // `data` is the return of the `load_cities` view function
+    //       $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+    //     }
+    //   });
+
+    // });
+
+
+
+    $("#id_region1").on('change', function () {
+      var url = $("#checkoutForm").attr("data-provinces-url");  // get the url of the `load_cities` view
+      var regionId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'region': regionId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_province1").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+    });
+
+    $("#id_province1").on("change", function () {
+      var url = $("#checkoutForm").attr("data-cities-url");  // get the url of the `load_cities` view
+      var provinceId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'province': provinceId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_city1").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+    });
+    //FOR US OF OTHER CITIES
+    // $("#id_city").on("change", function () {
+    //   var url = $("#checkoutForm").attr("data-barangays-url");  // get the url of the `load_cities` view
+    //   var cityId = $(this).val();  // get the selected country ID from the HTML input
+
+    //   $.ajax({                       // initialize an AJAX request
+    //     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+    //     data: {
+    //       'city': cityId       // add the country id to the GET parameters
+    //     },
+    //     success: function (data) {   // `data` is the return of the `load_cities` view function
+    //       $("#id_barangay").html(data);  // replace the contents of the city input with the data that came from the server
+    //     }
+    //   });
+
+
+    // });
+    $("#id_barangay").change(function () {
+      var url = $("#checkoutForm").attr("data-puroks-url");  // get the url of the `load_cities` view
+      var barangayId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'barangay': barangayId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_purok").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+
+    });
+    // $('#id_city').trigger('change');
+    $('#id_barangay').trigger('change');
+    // $('#id_province').trigger('change');
+    $('#id_province1').trigger('change');
+  });
+
+
+  // $("#id_city").change(function () {
+  //   var url = $("#checkoutForm").attr("data-barangays-url");  // get the url of the `load_cities` view
+  //   var cityId = $(this).val();  // get the selected country ID from the HTML input
+
+  //   $.ajax({                       // initialize an AJAX request
+  //     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+  //     data: {
+  //       'city': cityId       // add the country id to the GET parameters
+  //     },
+  //     success: function (data) {   // `data` is the return of the `load_cities` view function
+  //       $("#id_barangay").html(data);  // replace the contents of the city input with the data that came from the server
+  //     }
+  //   });
+
+  // });
+
+  // $("#id_barangay").change(function () {
+  //   var url = $("#checkoutForm").attr("data-puroks-url");  // get the url of the `load_cities` view
+  //   var barangayId = $(this).val();  // get the selected country ID from the HTML input
+
+  //   $.ajax({                       // initialize an AJAX request
+  //     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+  //     data: {
+  //       'barangay': barangayId       // add the country id to the GET parameters
+  //     },
+  //     success: function (data) {   // `data` is the return of the `load_cities` view function
+  //       $("#id_purok").html(data);  // replace the contents of the city input with the data that came from the server
+  //     }
+  //   });
+
+  // });
+  $("#id_city1").change(function () {
+    var url = $("#checkoutForm").attr("data-barangays-url");  // get the url of the `load_cities` view
+    var cityId = $(this).val();  // get the selected country ID from the HTML input
+
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+      data: {
+        'city': cityId       // add the country id to the GET parameters
+      },
+      success: function (data) {   // `data` is the return of the `load_cities` view function
+        $("#id_barangay1").html(data);  // replace the contents of the city input with the data that came from the server
+      }
+    });
+
+  });
+
+  $("#id_barangay1").change(function () {
+    var url = $("#checkoutForm").attr("data-puroks-url");  // get the url of the `load_cities` view
+    var barangayId = $(this).val();  // get the selected country ID from the HTML input
+
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+      data: {
+        'barangay': barangayId       // add the country id to the GET parameters
+      },
+      success: function (data) {   // `data` is the return of the `load_cities` view function
+        $("#id_purok1").html(data);  // replace the contents of the city input with the data that came from the server
+      }
+    });
+
+  });
+
+
+  $("#submitButton").click(function (e) {
+    if (use_delivery.checked) {
+      var regionS = $("#id_region option:selected").text();
+      var provinceS = $("#id_province option:selected").text();
+      var cityS = $("#id_city option:selected").text();
+      var barangayS = $("#id_barangay option:selected").text();
+      var purokS = $("#id_purok option:selected").text();
+      var streetS = document.querySelector("input[id=id_street_name]");
+      var shipping_address_var = streetS.value + ", " + purokS + ", " + barangayS + ", " + cityS + ", " + provinceS;
+      $('input[type=hidden][name=shipping_address]').val(shipping_address_var);
+
+      var regionB = $("#id_region1 option:selected").text();
+      var provinceB = $("#id_province1 option:selected").text();
+      var cityB = $("#id_city1 option:selected").text();
+      var barangayB = $("#id_barangay1 option:selected").text();
+      var purokB = $("#id_purok1 option:selected").text();
+      var streetB = document.querySelector("input[id=id_street_name1]");
+      var billing_address_var = streetS.value + ", " + purokS + ", " + barangayS + ", " + cityS + ", " + provinceS;
+      $('input[type=hidden][name=billing_address]').val(billing_address_var);
+
+      if (same_billing_address.checked) {
+        regionB = regionS;
+        provinceB = provinceS;
+        cityB = cityS;
+        barangayB = barangayS;
+        purokB = purokS;
+        streetB.value = streetS.value;
+        $("#billing_zip").val($("#shipping_zip").value);
+        $('input[type=hidden][name=billing_address]').val(shipping_address_var);
+      }
+    }
+  });
+</script>
+{% endblock extra_scripts %}

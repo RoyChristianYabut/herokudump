@@ -1,0 +1,638 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+
+<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/amazonmenu.css' %}">
+
+<script src="{% static 'js/amazonmenu.js' %}">
+
+  /* =====================================
+   ** Amazon Side Bar Menu- by JavaScript Kit (www.javascriptkit.com)
+   ** Visit JavaScript Kit at http://www.javascriptkit.com/ for full source code
+  ===================================== */
+
+</script>
+
+
+
+
+<style type="text/css">
+  /* Bootstrap */
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+    /* Firefox */
+  }
+
+  /*  */
+  /*
+      DEMO STYLE
+  */
+  @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+  html {
+    cursor: pointer;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+    position: relative;
+  }
+
+  p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+  }
+
+  /* ---------------------------------------------------
+      SIDEBAR STYLE
+  ----------------------------------------------------- */
+
+  .wrapper {
+    display: block;
+    width: 100%;
+    height: fit-content;
+    align-items: stretch;
+
+  }
+
+  #sidebar1.active {
+    transform: translateX(250px);
+  }
+
+  #sidebar1 {
+    position: absolute;
+    transition: all 0.5s;
+  }
+
+  @media (max-width: 576px) {
+    #sidebar1 {
+      position: fixed;
+      left: -250px;
+    }
+  }
+
+  .topMargin {
+    padding-top: 15vh;
+  }
+
+
+  @media (min-width: 995px) {
+    .topMargin {
+      padding-top: 10vh;
+    }
+  }
+
+  .marginLeftHome {
+    margin-left: 250px !important;
+    margin-right: auto !important;
+    /* min-width: 1000px; */
+  }
+
+  /* 
+  @media (max-width: 1256px) {
+    .marginLeftHome {
+      margin-left: 250px !important;
+      margin-right: 0px !important;
+      min-width: 800px;
+    }
+  } */
+  .rmkFont {
+    font-size: 14px !important;
+  }
+
+
+  @media (max-width: 576px) {
+    .marginLeftHome {
+      padding-left: 0 !important;
+      margin-left: 0 !important;
+
+      /* min-width: 0px; */
+    }
+
+    .imageSize {
+      max-width: 150px !important;
+      max-height: 180px !important;
+    }
+
+    .btnFont {
+      font-size: 10px !important;
+    }
+
+    .rmkFont {
+      font-size: 10px !important;
+    }
+
+    .titleFont {
+      font-size: 13px !important;
+    }
+
+    .cardHeight {
+      height: 330px !important;
+    }
+
+
+  }
+
+
+  @media (max-width: 420px) {
+    .marginLeftHome {
+      padding-left: 0 !important;
+      margin-left: 0 !important;
+
+      /* min-width: 0px; */
+    }
+
+    .imageSize {
+      max-width: 70px !important;
+      max-height: 100px !important;
+    }
+
+    .btnFont {
+      font-size: 7px !important;
+    }
+
+    .rmkFont {
+      font-size: 8px !important;
+    }
+
+    .titleFont {
+      font-size: 10px !important;
+    }
+
+    .cardHeight {
+      height: 330px !important;
+    }
+
+    .iconSize {
+      height: 20px !important;
+      width: 20px !important;
+    }
+
+    .inputWidth {
+      width: 25px !important;
+    }
+  }
+
+  .paddingTop {
+    padding-top: 40px !important;
+  }
+
+  .paddingTop2 {
+    padding-top: 0px;
+  }
+
+  @media (max-width: 991px) {
+    .paddingTop {
+      padding-top: 78px !important;
+    }
+
+    .paddingTop2 {
+      padding-top: 38px;
+    }
+
+  }
+
+  @media (min-width: 1600px) {
+    .cartright {
+      display: block !important;
+    }
+  }
+
+  @media (max-width: 1599px) {
+    .cartright {
+      display: none !important;
+    }
+  }
+
+  .extra_button {
+    padding: 0 !important;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+
+  /* 
+@media (min-width: 995px)
+ 
+  /* endscrollbar */
+</style>
+{% endblock extra_head %}
+
+
+
+
+{% block paddingtop %}
+
+<div id="sidebar1" class="overlay" style="z-index: 1000; height:100%; ">
+  <form method=" get">
+
+    <nav id="mysidebarmenu" class="amazonmenu " style="font-size:small; height: 100%;">
+      <a href="#roySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Roy Plaza
+        Supermarket</a>
+      <ul class=" paddingTop " id="roySubmenu">
+
+        <li>
+          <h4>CATEGORIES </h4>
+        </li>
+        {% include "sidebar.html" %}
+
+
+      </ul>
+
+
+
+    </nav>
+
+
+  </form>
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+<div class="wrapper paddingTop2" id=mainScreen>
+  <!-- Sidebar Holder -->
+  <div class="d-flex justify-content-start">
+
+
+    <!-- Page Content Holder -->
+    <div id="content" class="container d-block mt-2 marginLeftHome">
+
+      <!--  -->
+
+
+      <div class="container-fluid ">
+
+
+
+        <!--Section: Products v.3-->
+        <section class="text-center mb-4">
+
+
+
+
+          {% if company == "Roy Plaza Department Store"%}
+          <div class="alert-danger " style="text-align: center; z-index:3;  width:100%;position: relative;
+          padding: 0.75rem 1.25rem;
+          margin-bottom: 1rem;
+          border: 1px solid transparent;
+          border-radius: 0.25rem; ">
+            Department store is currently in progress, some items may not yet have their images. <br>
+
+            Rest assured we are commited to completing their images and cleaning their descriptions
+          </div>
+          {% elif company == "Bakebites"%}
+          {% else %}
+          <div class="alert-warning " style="text-align: center; z-index:3;  width:100%;position: relative;
+          padding: 0.75rem 1.25rem;
+          margin-bottom: 1rem;
+          border: 1px solid transparent;
+          border-radius: 0.25rem; ">
+            Due to logistics and supply challenges related to COVID-19, we cannot guarantee the availability of
+            some
+            items. <br>
+            Thank
+            you for your understanding and we apologize for the inconvenience. <br>
+            <p id="demo"></p>
+          </div>
+          {% endif %}
+
+          {% if search_filter %}
+          {{ count }} results
+          <h4><b>Search Results for</b> "{{search_filter}}"</h4>
+          {% endif %}
+
+          {% if category_filter %}
+          {{ count }} results
+          <h4><b>Search Results of</b></h4>
+          <h6>
+            {% for cat in category_filter reversed%}
+            >> {{ cat }}
+            {% endfor %}
+          </h6>
+          {% endif %}
+
+
+
+          <div class="row wow fadeIn">
+            {% include "cards.html" %}
+
+            <!-- empty placeholder -->
+
+            {% if page_obj|length < 4 %} <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4"
+              style="visibility:hidden">
+              <div class="card d-flex align-items-stretch" style="height:1px">
+                <div class="mx-auto  d-flex justify-content-center align-items-center"
+                  style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+                  <a href=" {{ item.get_absolute_url }}">
+                    <img src="{{ item.image.url }}" style="z-index:1; max-width:100%; 
+                    max-height:100%;">
+                  </a>
+                </div>
+              </div>
+          </div>
+          {% endif %}
+          {% if page_obj|length < 3 %} <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4" style="visibility:hidden">
+            <div class="card d-flex align-items-stretch" style="height:1px">
+              <div class="mx-auto  d-flex justify-content-center align-items-center"
+                style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+                <a href=" {{ item.get_absolute_url }}">
+                  <img src="{{ item.image.url }}" style="z-index:1; max-width:100%; 
+                    max-height:100%;">
+                </a>
+              </div>
+            </div>
+      </div>
+      {% endif %}
+      {% if page_obj|length < 2 %} <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4" style="visibility:hidden">
+        <div class="card d-flex align-items-stretch" style="height:1px">
+          <div class="mx-auto  d-flex justify-content-center align-items-center"
+            style="width: 200px; height: 206px; max-height: 206px; background-color: white; margin-top: 4px; ">
+            <a href=" {{ item.get_absolute_url }}">
+              <img src="{{ item.image.url }}" style="z-index:1; max-width:100%; 
+                    max-height:100%;">
+            </a>
+          </div>
+        </div>
+    </div>
+    {% endif %}
+  </div>
+
+  </section>
+  <!--Section: Products v.3-->
+
+  <!--Pagination-->
+  {% load page_template_tags %}
+
+  {% if page_obj.has_other_pages %}
+  <nav class="d-flex justify-content-center wow fadeIn">
+    <ul class="pagination pg-blue">
+
+      {% if page_obj.has_previous %}
+      {% if page_obj.number > 3 %}
+      <li class="page-item">
+        <a class="page-link" href="?{% param_replace page=1 %}">First
+          <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      {% endif %}
+      <li class="page-item">
+        <a class="page-link" href="?{% param_replace page=page_obj.previous_page_number %}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Previous</span>
+        </a>
+      </li>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+      <li class="page-item active">
+        <a class="page-link" href="?{% param_replace page=num %}">{{ num }}
+          <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <li class="page-item">
+        <a class="page-link" href="?{% param_replace page=num %}">{{ num }}
+          <span class="sr-only">(current)</span>
+        </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?{% param_replace page=page_obj.next_page_number %}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+        {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+
+<!--  -->
+</div>
+
+<!-- SMALLER VERSION -->
+<div class="cartright">
+
+  <!-- // Multiple Business erased this first -->
+  {% comment %}
+  {% include "home_snippet.html" %}
+  {% endcomment %}
+</div>
+</div>
+<!-- END SMALLER -->
+</div>
+
+
+{% endblock content %}
+{% block extra_scripts %}
+
+<script>
+
+  jQuery(function () {
+    amazonmenu.init({
+      menuid: 'mysidebarmenu'
+    })
+  })
+
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#sidebarCollapse').on('click', function () {
+      $('#sidebar1').toggleClass('active');
+      $(this).toggleClass('active');
+    });
+    $('#sidebarCollapse1').on('click', function () {
+      $('#sidebar1').toggleClass('active');
+      $(this).toggleClass('active');
+    });
+    // $('.dropdown').on('click', function () {
+    //   $('.dropdown-menu').toggleClass('show');
+    //   $(this).toggleClass('show');
+    // });
+
+
+    $('.inputNumber').on('change paste', function () {
+      var id = $(this).attr('id');
+      var val = document.getElementById(id).value;
+
+      var url = "update-cart";
+
+      if (val == null || val == "") {
+        val = 0;
+      }
+
+      document.location.href = url + "/" + id + "/" + val;
+
+    })
+    $('.add_to_cart').on('click', function () {
+      product_id = $(this).attr('data-id');
+      slug_id = $(this).attr('slug');
+      data_max = $(this).attr('data-max');
+      incrementValue(slug_id, data_max);
+
+      $.ajax({
+        type: 'GET',
+        url: product_id,
+      })
+      // Multiple Business erased this first
+      // $('#home_snippet').load(document.URL + ' #home_snippet');
+
+      $('#cart_no').load(document.URL + ' #cart_no');
+      $('#cart_no2').load(document.URL + ' #cart_no2');
+
+
+      // setTimeout(function () { location.reload() }, 400);
+    })
+    $('.add_to_cart_home').on('click', function () {
+      product_id = $(this).attr('data-id');
+
+
+      $.ajax({
+        type: 'GET',
+        url: product_id,
+      })
+
+      // slug_id = $(this).attr('slug');
+      // fam_id = $('#' + slug_id + "X").attr('class')
+
+      // $('#' + slug_id + "X").load(document.URL + ' #' + slug_id + 'X', function () {
+      //   itemShowingFunc2(slug_id + "X", fam_id);
+      // });
+      // $('#mainScreen').load(document.URL + ' #mainScreen');
+
+      // $('#home_snippet').load(document.URL + ' #home_snippet');
+      // $('#cart_no').load(document.URL + ' #cart_no');
+      // $('#cart_no2').load(document.URL + ' #cart_no2');
+
+      setTimeout(function () { location.reload() }, 400);
+    })
+    $('.remove_single_from_cart').on('click', function () {
+      product_id = $(this).attr('data-id');
+      slug_id = $(this).attr('slug');
+      decrementValue(slug_id);
+      var y = document.getElementById(slug_id);
+      $.ajax({
+        type: 'GET',
+        url: product_id,
+      })
+
+      if (y.value == 0) {
+        setTimeout(function () { location.reload() }, 400);
+      }
+      else {
+        // Multiple Business erased this first
+        // $('#home_snippet').load(document.URL + ' #home_snippet');
+
+        $('#' + slug_id + "X").load(document.URL + ' #' + slug_id + 'X');
+        $('#cart_no').load(document.URL + ' #cart_no');
+        $('#cart_no2').load(document.URL + ' #cart_no2');
+      }
+
+
+      // setTimeout(function () { location.reload() }, 400);
+    })
+    function decrementValue(slug) {
+      var y = document.getElementById(slug);
+      x = y.value;
+      if (y.value > 0) {
+        y.value = x - 1;
+      }
+    }
+    function incrementValue(slug, max) {
+      var y = document.getElementById(slug);
+      x = y.value;
+      if (max) {
+        if (y.value < max) {
+          y.value = parseInt(x) + 1;
+        }
+      }
+      else {
+
+        if (y.value < 999) {
+          y.value = parseInt(x) + 1;
+        }
+      }
+
+    }
+    $('.add_to_favorite').on('click', function () {
+      product_id = $(this).attr('data-id');
+
+
+      $.ajax({
+        type: 'GET',
+        url: product_id,
+      })
+
+      setTimeout(function () { location.reload() }, 1000);
+    })
+    $('.remove_from_favorites').on('click', function () {
+      product_id = $(this).attr('data-id');
+
+
+      $.ajax({
+        type: 'GET',
+        url: product_id,
+      })
+
+      setTimeout(function () { location.reload() }, 1000);
+    })
+  });
+</script>
+<script>
+
+
+  function itemShowingFunc(slug, counter) {
+    var y = document.getElementsByClassName(slug);
+
+    for (var i = 0; i < y.length; i++) {
+
+      y[i].style.display = 'none';
+      if (i == counter) {
+
+        y[i].style.display = 'block';
+      }
+    }
+  }
+  function itemShowingFunc2(slug, family) {
+    var y = document.getElementsByClassName(family);
+
+    for (var i = 0; i < y.length; i++) {
+      var x = y[i].getAttribute(id);
+      alert(x);
+      y[i].style.display = 'none';
+      if (x == slug) {
+
+        y[i].style.display = 'block';
+      }
+    }
+  }
+
+</script>
+
+
+{% endblock extra_scripts %}

@@ -1,0 +1,25 @@
+<form method="post" action="">
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h3 class="modal-title">Order Options</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <a class="stripeBtn2"
+            style="margin:none; padding:none;border-radius: 24px;color: white !important;background-color:                    #000083 !important;">Request
+            Change
+            Payment</a>
+        <a class="stripeBtn2"
+            style="margin:none; padding:none;border-radius: 24px;color: white !important;background-color:#FFD215 !important;">Cancel
+            Order</a>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger">Confirm</button>
+    </div>
+
+</form>

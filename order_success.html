@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <section class="mb-4">
+        <div class="row wow fadeIn">
+            <div class='mx-auto'>
+                <div style="text-align: left;">
+                    <h2>Your Order Was Successful!<br></h2>
+                    <h4>Your order with tracking #{{ tracking }} was successful! Thank you for shopping at ROY
+                        Plaza Store Online. <br><br>
+                        Please give us at least 24 hours to prepare your order. We will contact you when your order is
+                        ready for pick-up or delivery.<br><br>
+                        For inquiries or concerns, you may contact us through royplazastore@gmail.com or
+                        09352376703.<br><br>
+                        Thank you and God bless!<br><br>
+
+                    </h4>
+
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <a class='btn btn-primary float-right' href="{% url 'core:companypicker' %}">Continue shopping</a>
+    </section>
+</div>
+
+{% endblock %}

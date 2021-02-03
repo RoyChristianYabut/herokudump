@@ -1,0 +1,288 @@
+{% load static %}
+{% load google_analytics_js %} 
+{% load google_analytics_gtag %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% google_analytics_gtag %}
+
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>{% block head_title %}Roy Plaza Store{% endblock %}</title>
+    {% block extra_head %} {% endblock %}
+    <link
+      rel="shortcut icon"
+      type="image x-icon"
+      href="{% static 'img/logo_only_icon.png' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    />
+    <!-- scrollbar new -->
+    <!-- <link href="{% static 'css/style3.css' %}" rel="stylesheet"> -->
+    <!-- ends here -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/mdb.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
+
+    <!--  -->
+    <!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"
+      integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css"
+      integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"
+      integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- for sidebar -->
+    <!-- <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css"> -->
+
+    <!--  -->
+    <style type="text/css">
+      @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+      html,
+      body {
+        font-family: "Poppins", sans-serif;
+        height: 100%;
+        background-color: #f3f3f3;
+      }
+
+      header,
+      .carousel {
+        height: 60vh;
+      }
+
+      footer.page-footer {
+        bottom: 0;
+        z-index: 30;
+      }
+
+      .marginCarousel{
+        margin-left:2rem;
+        margin-right:2rem;
+        margin-bottom:3rem;
+      }
+
+      .buttonLink {
+        align-items: normal;
+        background-color: rgba(0, 0, 0, 0);
+        border-color: rgb(0, 0, 238);
+        border-style: none;
+        box-sizing: content-box;
+        color: #007bff;
+        cursor: pointer;
+        display: inline;
+        font: inherit;
+        height: auto;
+        padding: 0;
+        perspective-origin: 0 0;
+        text-align: start;
+        transform-origin: 0 0;
+        width: auto;
+
+        -moz-appearance: none;
+        -webkit-logical-height: 1em;
+        /* Chrome ignores auto, so we have to use this hack to set the correct height  */
+        -webkit-logical-width: auto;
+      }
+
+      .buttonLink:focus {
+        text-decoration: underline;
+        outline: none;
+        box-shadow: none;
+      }
+
+      @media (max-width: 576px) {
+        .btnSize {
+          padding: 0.2rem 0.4rem;
+          font-size: 0.875rem;
+          line-height: 1.5;
+          border-radius: 0.2rem;
+        }
+
+        .marginCarousel{
+          margin-left:0rem;
+          margin-right:0rem;
+          margin-bottom:1rem;
+        }
+      }
+    </style>
+
+    {% google_analytics_js %}
+  </head>
+
+  {% include "navbar.html" %}
+
+  <body style="height: auto">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+      </div>
+    </div>
+
+    {% block paddingtop %} {% endblock %}
+    <div class="mt-5 pt-5 container"></div>
+
+    <div style="min-height: calc(80vh - 6rem)">
+      {% block content %} {% endblock content %}
+    </div>
+
+    {% block extra_body %} {% endblock %} {% include "footer.html" %} {% include
+    "scripts.html" %} {% block extra_scripts %} {% endblock extra_scripts %}
+
+    <!-- jQuery Custom Scroller CDN -->
+    <!-- <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>-->
+    <script>
+      window.setTimeout(function () {
+        $(".alert")
+          .fadeTo(500, 0)
+          .slideUp(500, function () {
+            $(this).remove();
+          });
+      }, 3000);
+
+      $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $(".toast").toast({ delay: 5500 });
+        $(".toast").toast("show");
+      });
+
+      $(".ttop").tooltip({
+        placement: "top",
+      });
+
+      $(".order-options").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".privacy-read").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".update-img").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".update-coupon").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".remove-coupon").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".update-proof").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".update-phone").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".update-email").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".update-shipping").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".add-shipping").modalForm({
+        formURL: "{% url 'core:add_shipping' %}",
+      });
+      $(".update-billing").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".add-billing").modalForm({ formURL: "{% url 'core:add_billing' %}" });
+
+      $(".delete-email").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+
+      $(".delete-phone").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".delete-shipping").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+      $(".delete-billing").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+
+      $(".tandc").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+
+      $(".tandcagree").each(function () {
+        $(this).modalForm({ formURL: $(this).data("id") });
+      });
+
+      window.setTimeout(function () {
+        $(".popuptext")
+          .fadeTo(500, 0)
+          .slideUp(500, function () {});
+      }, 5000);
+
+      // $('#table').on('check.bs.table', function () {
+      //   $('[data-toggle="tooltip"]').tooltip();
+      // });
+
+      // // Set the date we're counting down to
+      // var countDownDate = new Date("Nov 11, 2020 00:00:00").getTime();
+
+      // // Update the count down every 1 second
+      // var x = setInterval(function () {
+
+      //   // Get today's date and time
+      //   var now = new Date().getTime();
+
+      //   // Find the distance between now and the count down date
+      //   var distance = countDownDate - now;
+
+      //   // Time calculations for days, hours, minutes and seconds
+      //   var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      //   var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      //   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      //   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      //   // Display the result in the element with id="demo"
+      //   document.getElementById("demo").innerHTML = "Time until maintenance: " + hours + "h "
+      //     + minutes + "m " + seconds + "s ";
+
+      //   // If the count down is finished, write some text
+      //   if (distance < 0) {
+      //     clearInterval(x);
+      //     document.getElementById("demo").innerHTML = "";
+      //   }
+      // }, 1000);
+    </script>
+  </body>
+</html>

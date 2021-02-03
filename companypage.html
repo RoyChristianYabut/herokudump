@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-n5" style="background-color: white; padding-right: 0px; padding-left: 0px;">
+
+
+    <div style="display:block; background-color:#FFD215">
+        <div class="pt-5" style="text-align: center;">
+            <img src="{% static 'img/landing_page_logo_with_beta@2x.png' %}" style="width: 20%; height: auto;">
+
+        </div>
+        <div style="position: relative; z-index:0; bottom:0;">
+            <img src="{% static 'img/musuanpeak@2x.png' %}" width="100%">
+
+            <div class="view overlay"
+                style="margin: auto;position: absolute; top: 65%; left: 0; bottom: 0; right: 0;z-index:3;">
+                <div class="d-flex justify-content-center">
+                    <div class="d-block d-sm-none d-md-none">
+                        <div style=" font-size: small; color:#000083;">
+
+                            <h4 style="font-size:inherit; font-weight: 400;">Experience a hassle-free shopping!</h4>
+                        </div>
+                    </div>
+                    <div class="d-none d-sm-block d-md-block">
+                        <div style=" font-size: large; color:#000083;">
+
+                            <h4 style="font-weight: 400;">Experience a hassle-free shopping!</h4>
+                        </div>
+                    </div>
+                    <br>
+
+                </div>
+
+
+                <div class="d-block d-sm-none d-md-none">
+                    <div class="d-flex justify-content-center mt-0">
+                        <a href="{% url 'core:about' %}" class="btn btn-warning btn-sm"
+                            style="border-radius: 24px;">Register Now!</a>
+                    </div>
+                </div>
+                <div class="d-none d-sm-block d-md-block">
+                    <div class="d-flex justify-content-center pt-1 ">
+                        <a href="{% url 'core:about' %}" class="btn btn-warning btn-sm"
+                            style="border-radius: 24px;">Register Now!</a>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+    <div class="mx-3 my-0">
+        <h4 style=" font-weight: 400; color:#000083;">ROY Plaza Store Online, Valencia City</h4>
+        <p>ROY Plaza Store Online is the leading e-commerce store in Valencia City, Bukidnon. ROY Plaza Store is
+            providing
+            a convenient online one-stop marketplace. It aims to adapt to the needs of its customers by consistently
+            streamlining
+            the website, growing the inventory of items offering a convenient payment option, and delivering effortless
+            shopping
+            experience to the customers. <br><br>
+            By The grace of God, ROY Plaza continued to flourish as it is led by pominent individuals and progressive
+            thinkers -
+            providing the community with services and products that make their shopping experience easier.
+        </p>
+        <h4 style=" font-weight: 400; color:#000083;">Experience Hassle-free deals, Shop smart, shop here</h4>
+        <p>The tagline "Shop smart, shop here" encapsulates the company's desire to delight its customers. Customers can
+            expect an
+            affordable and convenient online shopping experience.
+        </p>
+        <p><b>a. PAYMENT ON DELIVERY AND SSC POINTS</b><br>
+            The customer's payment transaction is convenient, even without a credit card. ROY Plaza Store offers
+            convenient
+            payment options for our customers. Cash on delivery is useful in Valencia City, where a lot of people do not
+            use
+            cards as a mode of payment, and customers may use their SSC reward points to pay for their grocery items.
+            Moreover,
+            payment on delivery also helps to build trust with the customers because they only pay for the items once
+            delivered
+            to their homes. </p>
+        <p><b>b. EASY SHOPPING</b><br>
+            Customers can access ROY Plaza Store 24/7 and can choose a wide range variety of products accoring to its
+            selected category. </p>
+        <p style="margin-bottom: 0px;"><b>c. FLEXIBLE RETURN POLICY</b><br>
+            Products can be returned within 48 hours, depending on the type of product purchased. The customer service
+            team
+            can assist
+            the customers with any of their questions. </p>
+        <br>
+    </div>
+
+</div>
+{% endblock content %}

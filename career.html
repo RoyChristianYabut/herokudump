@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-n5" style="background-color: white; padding-right: 0px; padding-left: 0px;">
+
+
+    <div style="display:block; background-color:#FFD215; padding-top:20vh">
+        <div class="pt-5" style="text-align: center; ">
+            <div class="view overlay"
+                style="margin: auto;position: absolute; top: 0; left: 0; right: 0;z-index:3; padding-top: 20vh;">
+
+                <div class="d-flex justify-content-center">
+
+                    <div style="max-width: 60vh;">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-6"
+                                style="text-align:right;padding-right: 0; margin-left: auto; margin-right: 0;">
+
+
+                                <div class="d-block d-sm-none d-md-none">
+                                    <img src=" {% static 'img/ROY-Plaza-Store-Logo-1.png' %}"
+                                        style="margin-left: auto; text-align:right;min-height: 50%; max-height: 15vh;">
+                                </div>
+
+                                <div class="d-none d-sm-block d-md-block">
+                                    <img src=" {% static 'img/ROY-Plaza-Store-Logo-1.png' %}"
+                                        style="margin-left: auto; text-align:right;min-height: 100px; max-height: 20vh;">
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-6"
+                                style="text-align: left; font-size: large; color:#000083; width:;padding-right: 0; margin-right: 0;">
+
+                                <div class="d-block d-sm-none d-md-none" style="margin-right: 15px;">
+                                    <h6 style="font-weight: 400;font-size: x-small;">The best place for you to earn
+                                        income
+                                        yet be the best
+                                        version of yourself.</h6>
+                                    <h5 class="btn btn-sm"
+                                        style="border-radius: 24px; background-color: #000083; color:white; font-size: x-small;">
+                                        Serve with
+                                        Us!</h5>
+                                </div>
+
+                                <div class="d-none d-sm-block d-md-block">
+                                    <h5 style="font-weight: 400;">The best place for you to earn income yet be the best
+                                        version of yourself.</h5>
+                                    <h4 class="btn btn-sm"
+                                        style="border-radius: 24px; background-color: #000083; color:white;">Serve with
+                                        Us!</h4>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <br>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+        <div style="position: relative; z-index:0; bottom:0;">
+            <img src="{% static 'img/musuanpeak@2x.png' %}" width="100%">
+
+
+
+        </div>
+    </div>
+
+    <br><br>
+    <div class="mx-3 my-0">
+        <h4 style=" font-weight: 400; color:#000083;">ROY Plaza Store Corporation</h4>
+        <p>
+            ROY Plaza Corporation has been one of the corporate arm in Valencia City, Bukidnon to provide jobs for the
+            community for almost three decades now. With the end goal of touching lives godliness and excellence, it
+            continuously upholds its core values--excellence, passion, integrity and Christ-centeredness, to be able to
+            produce compleat individuals joyfully serving and providing sustainable livelihood for the community.
+        </p>
+        <h4 style=" font-weight: 400; color:#000083;">List of Available Positions</h4>
+        <p style="font-weight: 500; color: gray;">
+            Customer Service Assistant<br>
+            Cashier<br>
+            Packer<br>
+            Encode<br>
+            Accountant<br>
+
+        </p>
+        <h4 style=" font-weight: 400; color:#000083;">Drop your resume here!</h4>
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group view overlay" style="z-index: 2000;">
+                {% csrf_token %}
+                <label for="exampleFormControlFile1">Resume</label>
+                <input type="file" name="resume" class="form-control-file" id="exampleFormControlFile1">
+                <button type="Submit">Upload File</button>
+            </div>
+        </form>
+        <br>
+        <p style="font-size: small; text-align: center; padding-bottom: 0px; margin-bottom: 0px;">If you have questions,
+            please contact us at (ROY Plaza mobile number) or email us
+            at royplazacorphr@gmail.com</p>
+        <br>
+    </div>
+
+</div>
+{% endblock content %}

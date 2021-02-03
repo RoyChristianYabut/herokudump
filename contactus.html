@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .row {
+        display: flex;
+        /* equal height of the children */
+    }
+
+    .col {
+        flex: 1;
+        /* additionally, equal width */
+
+
+    }
+</style>
+
+<div class="d-md-flex h-md-100 align-items-center">
+
+    <!-- First Half -->
+    <div class="row">
+        <div class="col-md-6 p-0 bg-white h-md-100">
+            <div class="d-md-flex align-items-center h-100 p-5 text-left justify-content-center">
+                <div class="logoarea pt-2 pb-2">
+                    <h2 style="color: #000083; font-weight: 600;">Contact us</h2>
+                    <p>Please feel free to contact us if you have any further questions or concerns by signing up on the
+                        message
+                        section. For cancellation, order status inquiry, and returns, please log in to your ROY Plaza
+                        store
+                        account
+                        and
+                        proceed to the Order History, or call us at 828-3385. We are here to serve you everyday! </p>
+                    <br>
+                    <h3>ADDRESS</h3>
+                    <p>ROY Plaza Corporation<br>
+                        Lucio T. Alkuino St.<br>
+                        Poblacion, Valencia City<br>
+                    </p>
+                    <h3>Phone</h3>
+                    <p>Customer Service<br>
+                        Telefax: 828-3385<br>
+                        CWD: 828-3268<br>
+                    </p>
+                    <h3>Social Media</h3>
+                    <div>
+                        <a href="https://www.facebook.com/RoyPlazaValencia" target="_blank">
+                            <img style="filter: invert();" src="{% static 'img/facebook_link_white@2x.png' %}">
+                        </a>
+
+                        <a href="https://www.youtube.com/channel/UCckfTcz5bCseA36e-0BbtCg?view_as=subscriber"
+                            target="_blank">
+                            <img style="filter: invert();" src="{% static 'img/youtube_link_white@2x.png' %}">
+                        </a>
+
+                        <a href="https://www.instagram.com/royplaza_official/" target="_blank">
+                            <img style="filter: invert();" src="{% static 'img/instagram_link_white@2x.png' %}">
+                        </a>
+
+                        <a href="https://www.tiktok.com/@royplaza_valencia" target="_blank">
+                            <img style="filter: invert();" src="{% static 'img/tiktok_link_white@2x.png' %}">
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Half -->
+
+        <div class="col-md-6 p-0 bg-white h-md-100 loginarea">
+            <div class="d-md-flex align-items-center h-md-100 p-5 justify-content-center">
+                <form action=" ." method="post">
+                    <h2 style="color: #000083; font-weight: 600;">Leave us a message</h2>
+
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="name" maxlength="40" required id="id_name"
+                            placeholder="Name">
+
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="email" name="email" maxlength="254" required id="id_email"
+                            placeholder="Email">
+
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="message" cols="40" rows="10" required id="id_message"
+                            placeholder="Message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-warning float-right">Send</button>
+                    <!-- <a class='btn btn-primary float-right' href="{% url 'core:home' %}">Send</a> -->
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

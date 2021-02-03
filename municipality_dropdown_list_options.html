@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for municipality in municipalitys %}
+<option value="{{ municipality.pk }}">{{ municipality.LGU_NAME }}</option>
+{% endfor %}

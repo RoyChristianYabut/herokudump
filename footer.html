@@ -1,0 +1,129 @@
+{% load static %}
+<footer class="navbar page-footer text-left font-small wow fadeIn"
+  style="background-color: #000083; z-index: 1001; min-height: 20vh; margin-bottom:0; ">
+  <div class=" mx-2 " style="width: 100%;">
+    <br>
+    <h5>ROY Plaza Store Online</h5>
+    <table id="table">
+      <tr>
+        <td style="padding-right:33px;">
+          <div><a href=" {% url 'core:about' %}" target="_blank"> About us </a></div>
+        </td>
+        <td style="padding-right:3px;">
+          <div data-toggle="tooltip" data-placement="right" title="Serving you soon!"><a href="#!"> Help </a></div>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-right:3px;">
+          <div><a href="{% url 'core:contact-us' %}" target="_blank"> Contact us </a></div>
+        </td>
+        <td style="padding-right:3px;">
+          <div><a href="#!" data-toggle="tooltip" data-placement="right" title="Serving you soon!"> ROY Plaza Corp. </a>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <!-- <td style="padding-right:30px;">
+          <div><a href="#!" data-toggle="tooltip" data-placement="right" title="Serving you soon!"> Terms and Conditions
+            </a></div>
+        </td> -->
+        <td style="padding-right:30px;"><button type="button" class="tandc buttonLink" style="color:white;"
+            data-id="{% url 'core:t_and_c' 1 %}">Terms & Conditions</button></td>
+        <td style="padding-right:3px;">
+          <div><a href="{% url 'core:company-page' %}" target="_blank"> Company Page </a></div>
+        </td>
+      </tr>
+      <tr>
+        <!-- <td style="padding-right:30px;"><button type="button" class="policy-read buttonLink" style="color:white;"
+            data-id="{% url 'core:read_privacy' 1 %}">Policies</button></td> -->
+        <!-- <td style="padding-right:3px;">
+          <div><a href="#!" data-toggle="tooltip" data-placement="right" title="Serving you soon!"> Policies </a></div>
+        </td> -->
+        <!-- <td style="padding-right:3px;">
+          <div><a href="#!" data-toggle="tooltip" data-placement="right" title="Serving you soon!"> FAQs </a></div>
+        </td> -->
+        <td style="padding-right:3px;">
+          <div><a href="{% url 'core:faqs' %}" target="_blank"> FAQS </a></div>
+        </td>
+        <td style="padding-right:3px;">
+          <div><a href="{% url 'core:career-page' %}" target="_blank"> Career </a></div>
+        </td>
+      </tr>
+
+
+    </table>
+    <div class="row">
+      <div class="col">
+        <br>
+
+        <a href="https://www.facebook.com/RoyPlazaValencia" target="_blank">
+          <img src="{% static 'img/facebook_link_white@2x.png' %}" height="24" width="24">
+        </a>
+        <a href="https://www.youtube.com/channel/UCckfTcz5bCseA36e-0BbtCg?view_as=subscriber" target="_blank">
+          <img src="{% static 'img/youtube_link_white@2x.png' %}" height="24" width="24">
+        </a>
+        <a href="https://www.instagram.com/royplaza_official/" target="_blank">
+          <img src="{% static 'img/instagram_link_white@2x.png' %}" height="24" width="24">
+        </a>
+
+        <a href="https://www.tiktok.com/@royplaza_valencia" target="_blank">
+          <img src="{% static 'img/tiktok_link_white@2x.png' %}" height="24" width="24">
+        </a>
+
+      </div>
+      <div class="col" style="text-align:center;">
+        <!-- <a href="{% comment %}{% url 'core:companypicker' %}{% endcomment %}" target="_blank">
+          <img src="{% static 'img/powered_by_royaltech@2x.png' %}" height="42">
+        </a> -->
+        <!-- ADD when theres company -->
+      </div>
+      <div class="col text-right">
+        <br>
+
+        <img src="{% static 'img/bistro_logo.png' %}">
+        <img src="{% static 'img/bakebites_logo.png' %}">
+        <img src="{% static 'img/rpc_logo.png' %}">
+
+      </div>
+    </div>
+  </div>
+  <!-- Social icons -->
+  <!-- <div class="pb-4">
+      <a href="https://www.facebook.com/RoyPlazaValencia" target="_blank">
+        <i class="fab fa-facebook-f mr-3"></i>
+      </a>
+
+      <a href="https://www.youtube.com/channel/UCckfTcz5bCseA36e-0BbtCg?view_as=subscriber" target="_blank">
+        <i class="fab fa-youtube mr-3"></i>
+      </a>
+
+      <a href="https://www.instagram.com/royplaza_official/" target="_blank">
+        <i class="fab fa-instagram mr-3"></i>
+      </a>
+
+      <a href="https://www.tiktok.com/@royplaza_valencia" target="_blank">
+        <img src="{% static 'img/svg/tiktok.svg' %}">
+      </a>
+
+
+
+      <img src="{% static 'img/royplazastore_icon_white@2x.png' %}" style="float:right; padding:40%;"> -->
+
+  <!-- | © 2020
+    Copyright: -->
+  <!-- <a href="" target="_blank"> RoyalTech </a> -->
+
+  </div>
+
+  <!-- Social icons -->
+
+  <!--Copyright-->
+  <!-- <div class="footer-copyright py-3">
+    <a href="{% url 'core:about' %}" target="_blank"> About us </a>|<a href="{% url 'core:contact-us' %}"
+      target="_blank"> Contact us </a> © 2020
+    Copyright:
+    <a href="" target="_blank"> RoyalTech </a>
+  </div> -->
+  <!--/.Copyright-->
+
+</footer>

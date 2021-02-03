@@ -1,0 +1,538 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .row {
+        display: flex;
+        /* equal height of the children */
+        /* background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url(static/img/musuanpeak@2x.png); */
+    }
+
+    .col {
+        flex: 1;
+        /* additionally, equal width */
+
+
+    }
+</style>
+<div style="display:block;z-index: 1100;">
+    <div class="d-block d-lg-none d-md-none d-sm-none">
+        <div style="display:block;">
+
+            <div class=" d-md-flex h-md-100 align-items-center"
+                style="width: 100%; height: 100%; margin: none; padding: none; z-index: 10;">
+
+                <!-- First Half -->
+                <div class="row" style="background-color: #FFD215;">
+
+                    <div class="col-md-6 p-0 h-md-100">
+                        <div class="d-md-flex align-items-center h-100 p-5 text-left justify-content-center">
+                            <div class="logoarea">
+                                <div style=" text-align: center; ">
+                                    <img src=" {% static 'img/landing_page_logo_with_beta_white@2x.png' %}"
+                                        style="position: relative; z-index:200; width: 50%; height: auto;">
+                                </div>
+                                <div style="position: relative; z-index:0; bottom:0;">
+                                    <img src="{% static 'img/musuanpeak@2x.png' %}" width="100%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Second Half -->
+
+                    <div class="col-md-6 p-0 h-md-100">
+                        <div class="d-block d-lg-none d-md-none d-sm-none">
+                            <div class="d-md-flex align-items-center bg-white h-md-100 p-4 justify-content-center">
+                                <div>
+                                    <h2 style="color: #000083; font-weight: 600;">About Us</h2>
+                                    <p>ROY Plaza Corporation humbly started in 1978 with a registry name "ROY Bargain
+                                        Center", a
+                                        single
+                                        proprietorship
+                                        business engaged in retailing dry goods at Dipolog City. Ten years later, they
+                                        were
+                                        able
+                                        to
+                                        own
+                                        new
+                                        property. On
+                                        that property, they constructed a 4-story building along Rizal Avenue, Dipolog
+                                        City,
+                                        and
+                                        gave
+                                        the
+                                        business a new
+                                        name, "Roy Plaza". </p>
+                                    <p>ROY Plaza corporation was approved by the Securities and Exchange Commission
+                                        (SEC) in
+                                        the
+                                        year
+                                        1996.
+                                        In the year
+                                        1998, the corporation was able to acquire property in Valencia, Bukidnon.
+                                        Moreover,
+                                        the
+                                        business
+                                        continued to
+                                        flourish, and started to engage in selling grocery items, and created a loyalty
+                                        program
+                                        for
+                                        their
+                                        customers.
+                                        Despite the challenges, ROY Plaza continued to grow by God’s grace, together
+                                        with
+                                        hard
+                                        work,
+                                        patience, faith,
+                                        and obedience to God. Out of the overflow of God’s blessings, the company
+                                        started
+                                        giving
+                                        school
+                                        supplies to
+                                        different schools in Valencia City eight years ago. </p>
+                                    <p>ROY Plaza faced another challenge in March 2020 when the Philippines experienced
+                                        a
+                                        tremendous
+                                        outbreak that
+                                        affected the lives of Filipinos-- including businesses and other establishments.
+                                        To
+                                        prevent
+                                        the
+                                        spread of
+                                        COVID-19, the president declared a general community quarantine in the country,
+                                        which
+                                        also
+                                        affected
+                                        people’s
+                                        shopping behavior.</p>
+                                    <p>The Valencia City participated in the ECQ and declared a lockdown wherein no
+                                        outsiders
+                                        are
+                                        allowed to
+                                        pass
+                                        through Valencia City, senior citizen and children with pre-existing diseases
+                                        are
+                                        not
+                                        allowed to
+                                        go
+                                        out, and the
+                                        implementation of curfew time at 8:00 pm-5:00 am. As more cities are under
+                                        lockdowns,
+                                        nonessential
+                                        establishments are ordered to close, and customers were avoiding public places.
+                                        During
+                                        this
+                                        season,
+                                        people are
+                                        requesting for online shopping ready for delivery and pick-up. With this, ROY
+                                        Plaza
+                                        Store
+                                        comes
+                                        up
+                                        with a
+                                        solution to provide an online one-stop marketplace, in a modernized, tech-savvy,
+                                        and
+                                        friendly
+                                        way,
+                                        which is very
+                                        timely for the customer's needs. </p>
+                                    <p>ROY Plaza Store aims to provide the customers with a firm range of services and
+                                        products
+                                        that
+                                        makes
+                                        the
+                                        customer’s shopping experience easier. Hence, ROY Plaza Store envision a world
+                                        where
+                                        all
+                                        people
+                                        have
+                                        what they
+                                        need.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-sm-block d-md-block d-none">
+                            <div class="d-sm-flex align-items-center h-md-100 p-5 justify-content-center">
+                                <div style="position: relative; z-index:200;">
+                                    <h2 style="color: #000083; font-weight: 600;">About Us</h2>
+                                    <p>ROY Plaza Corporation humbly started in 1978 with a
+                                        registry name "ROY Bargain
+                                        Center", a
+                                        single
+                                        proprietorship
+                                        business engaged in retailing dry goods at Dipolog City. Ten years later, they
+                                        were
+                                        able
+                                        to
+                                        own
+                                        new
+                                        property. On
+                                        that property, they constructed a 4-story building along Rizal Avenue, Dipolog
+                                        City,
+                                        and
+                                        gave
+                                        the
+                                        business a new
+                                        name, "Roy Plaza". </p>
+                                    <p>ROY Plaza corporation was approved by the Securities and Exchange Commission
+                                        (SEC) in
+                                        the
+                                        year
+                                        1996.
+                                        In the year
+                                        1998, the corporation was able to acquire property in Valencia, Bukidnon.
+                                        Moreover,
+                                        the
+                                        business
+                                        continued to
+                                        flourish, and started to engage in selling grocery items, and created a loyalty
+                                        program
+                                        for
+                                        their
+                                        customers.
+                                        Despite the challenges, ROY Plaza continued to grow by God’s grace, together
+                                        with
+                                        hard
+                                        work,
+                                        patience, faith,
+                                        and obedience to God. Out of the overflow of God’s blessings, the company
+                                        started
+                                        giving
+                                        school
+                                        supplies to
+                                        different schools in Valencia City eight years ago. </p>
+                                    <p>ROY Plaza faced another challenge in March 2020 when the Philippines experienced
+                                        a
+                                        tremendous
+                                        outbreak that
+                                        affected the lives of Filipinos-- including businesses and other establishments.
+                                        To
+                                        prevent
+                                        the
+                                        spread of
+                                        COVID-19, the president declared a general community quarantine in the country,
+                                        which
+                                        also
+                                        affected
+                                        people’s
+                                        shopping behavior.</p>
+                                    <p>The Valencia City participated in the ECQ and declared a lockdown wherein no
+                                        outsiders
+                                        are
+                                        allowed to
+                                        pass
+                                        through Valencia City, senior citizen and children with pre-existing diseases
+                                        are
+                                        not
+                                        allowed to
+                                        go
+                                        out, and the
+                                        implementation of curfew time at 8:00 pm-5:00 am. As more cities are under
+                                        lockdowns,
+                                        nonessential
+                                        establishments are ordered to close, and customers were avoiding public places.
+                                        During
+                                        this
+                                        season,
+                                        people are
+                                        requesting for online shopping ready for delivery and pick-up. With this, ROY
+                                        Plaza
+                                        Store
+                                        comes
+                                        up
+                                        with a
+                                        solution to provide an online one-stop marketplace, in a modernized, tech-savvy,
+                                        and
+                                        friendly
+                                        way,
+                                        which is very
+                                        timely for the customer's needs. </p>
+                                    <p>ROY Plaza Store aims to provide the customers with a firm range of services and
+                                        products
+                                        that
+                                        makes
+                                        the
+                                        customer’s shopping experience easier. Hence, ROY Plaza Store envision a world
+                                        where
+                                        all
+                                        people
+                                        have
+                                        what they
+                                        need.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="d-md-block d-sm-block d-none">
+        <div style="display:block;">
+
+            <div class=" d-sm-flex h-md-100 align-items-center"
+                style="width: 100%; height: 100%; margin: none; padding: none; z-index: 10;">
+
+                <!-- First Half -->
+                <div class="row" style="background-color: #FFD215;">
+
+                    <div class="col-md-6 p-0 h-md-100">
+                        <div class="d-md-flex align-items-center h-100 p-5 text-left justify-content-center">
+                            <div class="logoarea">
+                                <div style=" text-align: center; ">
+                                    <img src=" {% static 'img/landing_page_logo_with_beta_white@2x.png' %}"
+                                        style="position: relative; z-index:200; width: 50%; height: auto;">
+                                </div>
+                                <!-- <div style="position: relative; z-index:0; bottom:0;">
+                                <img src="{% static 'img/musuanpeak@2x.png' %}" width="100%">
+                            </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Second Half -->
+
+                    <div class="col-md-6 p-0 h-md-100">
+                        <div class="d-block d-lg-none d-md-none d-sm-none">
+                            <div class="d-md-flex align-items-center bg-white h-md-100 p-4 justify-content-center">
+                                <div>
+                                    <h2 style="color: #000083; font-weight: 600;">About Us</h2>
+                                    <p>ROY Plaza Corporation humbly started in 1978 with a registry name "ROY Bargain
+                                        Center", a
+                                        single
+                                        proprietorship
+                                        business engaged in retailing dry goods at Dipolog City. Ten years later, they
+                                        were
+                                        able
+                                        to
+                                        own
+                                        new
+                                        property. On
+                                        that property, they constructed a 4-story building along Rizal Avenue, Dipolog
+                                        City,
+                                        and
+                                        gave
+                                        the
+                                        business a new
+                                        name, "Roy Plaza". </p>
+                                    <p>ROY Plaza corporation was approved by the Securities and Exchange Commission
+                                        (SEC) in
+                                        the
+                                        year
+                                        1996.
+                                        In the year
+                                        1998, the corporation was able to acquire property in Valencia, Bukidnon.
+                                        Moreover,
+                                        the
+                                        business
+                                        continued to
+                                        flourish, and started to engage in selling grocery items, and created a loyalty
+                                        program
+                                        for
+                                        their
+                                        customers.
+                                        Despite the challenges, ROY Plaza continued to grow by God’s grace, together
+                                        with
+                                        hard
+                                        work,
+                                        patience, faith,
+                                        and obedience to God. Out of the overflow of God’s blessings, the company
+                                        started
+                                        giving
+                                        school
+                                        supplies to
+                                        different schools in Valencia City eight years ago. </p>
+                                    <p>ROY Plaza faced another challenge in March 2020 when the Philippines experienced
+                                        a
+                                        tremendous
+                                        outbreak that
+                                        affected the lives of Filipinos-- including businesses and other establishments.
+                                        To
+                                        prevent
+                                        the
+                                        spread of
+                                        COVID-19, the president declared a general community quarantine in the country,
+                                        which
+                                        also
+                                        affected
+                                        people’s
+                                        shopping behavior.</p>
+                                    <p>The Valencia City participated in the ECQ and declared a lockdown wherein no
+                                        outsiders
+                                        are
+                                        allowed to
+                                        pass
+                                        through Valencia City, senior citizen and children with pre-existing diseases
+                                        are
+                                        not
+                                        allowed to
+                                        go
+                                        out, and the
+                                        implementation of curfew time at 8:00 pm-5:00 am. As more cities are under
+                                        lockdowns,
+                                        nonessential
+                                        establishments are ordered to close, and customers were avoiding public places.
+                                        During
+                                        this
+                                        season,
+                                        people are
+                                        requesting for online shopping ready for delivery and pick-up. With this, ROY
+                                        Plaza
+                                        Store
+                                        comes
+                                        up
+                                        with a
+                                        solution to provide an online one-stop marketplace, in a modernized, tech-savvy,
+                                        and
+                                        friendly
+                                        way,
+                                        which is very
+                                        timely for the customer's needs. </p>
+                                    <p>ROY Plaza Store aims to provide the customers with a firm range of services and
+                                        products
+                                        that
+                                        makes
+                                        the
+                                        customer’s shopping experience easier. Hence, ROY Plaza Store envision a world
+                                        where
+                                        all
+                                        people
+                                        have
+                                        what they
+                                        need.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-sm-block d-md-block d-none">
+                            <div class="d-sm-flex align-items-center h-md-100 p-5 justify-content-center">
+                                <div style="position: relative; z-index:200;">
+                                    <h2 style="color: #000083; font-weight: 600;">About Us</h2>
+                                    <p>ROY Plaza Corporation humbly started in 1978 with a registry name "ROY Bargain
+                                        Center", a
+                                        single
+                                        proprietorship
+                                        business engaged in retailing dry goods at Dipolog City. Ten years later, they
+                                        were
+                                        able
+                                        to
+                                        own
+                                        new
+                                        property. On
+                                        that property, they constructed a 4-story building along Rizal Avenue, Dipolog
+                                        City,
+                                        and
+                                        gave
+                                        the
+                                        business a new
+                                        name, "Roy Plaza". </p>
+                                    <p>ROY Plaza corporation was approved by the Securities and Exchange Commission
+                                        (SEC) in
+                                        the
+                                        year
+                                        1996.
+                                        In the year
+                                        1998, the corporation was able to acquire property in Valencia, Bukidnon.
+                                        Moreover,
+                                        the
+                                        business
+                                        continued to
+                                        flourish, and started to engage in selling grocery items, and created a loyalty
+                                        program
+                                        for
+                                        their
+                                        customers.
+                                        Despite the challenges, ROY Plaza continued to grow by God’s grace, together
+                                        with
+                                        hard
+                                        work,
+                                        patience, faith,
+                                        and obedience to God. Out of the overflow of God’s blessings, the company
+                                        started
+                                        giving
+                                        school
+                                        supplies to
+                                        different schools in Valencia City eight years ago. </p>
+                                    <p>ROY Plaza faced another challenge in March 2020 when the Philippines experienced
+                                        a
+                                        tremendous
+                                        outbreak that
+                                        affected the lives of Filipinos-- including businesses and other establishments.
+                                        To
+                                        prevent
+                                        the
+                                        spread of
+                                        COVID-19, the president declared a general community quarantine in the country,
+                                        which
+                                        also
+                                        affected
+                                        people’s
+                                        shopping behavior.</p>
+                                    <p>The Valencia City participated in the ECQ and declared a lockdown wherein no
+                                        outsiders
+                                        are
+                                        allowed to
+                                        pass
+                                        through Valencia City, senior citizen and children with pre-existing diseases
+                                        are
+                                        not
+                                        allowed to
+                                        go
+                                        out, and the
+                                        implementation of curfew time at 8:00 pm-5:00 am. As more cities are under
+                                        lockdowns,
+                                        nonessential
+                                        establishments are ordered to close, and customers were avoiding public places.
+                                        During
+                                        this
+                                        season,
+                                        people are
+                                        requesting for online shopping ready for delivery and pick-up. With this, ROY
+                                        Plaza
+                                        Store
+                                        comes
+                                        up
+                                        with a
+                                        solution to provide an online one-stop marketplace, in a modernized, tech-savvy,
+                                        and
+                                        friendly
+                                        way,
+                                        which is very
+                                        timely for the customer's needs. </p>
+                                    <p>ROY Plaza Store aims to provide the customers with a firm range of services and
+                                        products
+                                        that
+                                        makes
+                                        the
+                                        customer’s shopping experience easier. Hence, ROY Plaza Store envision a world
+                                        where
+                                        all
+                                        people
+                                        have
+                                        what they
+                                        need.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overlay" style="float:inline-start;  z-index:100; margin: none; padding: none;">
+            <!--  transform: translate(0,-100%); -->
+            <img src="{% static 'img/musuanpeak@2x.png' %}"
+                style="width:100%; height:auto; position:absolute; transform: translate(0, -100%); z-index:100; top:auto;">
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}
